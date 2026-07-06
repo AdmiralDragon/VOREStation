@@ -224,22 +224,22 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		var/response
 		if(src.client && src.client.holder)
-			response = tgui_alert(src, "You have the ability to Admin-Ghost. The regular Ghost verb will announce your presence to dead chat. Both variants will allow you to return to your body using 'aghost'.\n\nWhat do you wish to do?", "Are you sure you want to ghost?", list("Ghost", "Admin Ghost", "Stay in body"))
+			response = tgui_alert(src, "You have the ability to Admin-Ghost. The regular Ghost verb will announce your presence to dead chat. Both variants will allow you to return to your body using 'aghost'.\n\nWhat do you wish to do?", "Are you sure you want to ghost?", list("Admin Ghost", "Ghost", "Stay in body"))
 			if(response == "Admin Ghost")
 				if(!src.client)
 					return
 				src.client.admin_ghost()
 		else
-			response = tgui_alert(src, "Are you -sure- you want to ghost?\n(You are alive, or otherwise have the potential to become alive. Don't abuse ghost unless you are inside a cryopod or equivalent! You can't change your mind so choose wisely!)", "Are you sure you want to ghost?", list("Ghost", "Stay in body")) // VOREStation edit because we don't make players stay dead for 30 minutes.
+			response = tgui_alert(src, "Are you -sure- you want to ghost?\n(You are alive, or otherwise have the potential to become alive. Don't abuse ghost unless you are inside a cryopod or equivalent! You can't change your mind so choose wisely!)", "Are you sure you want to ghost?", list("Stay in body", "Ghost"))
 		if(response != "Ghost")
 			return
 		resting = 1
 		var/turf/location = get_turf(src)
 		var/special_role = check_special_role()
 		if(!istype(loc,/obj/machinery/cryopod))
-			log_and_message_admins("has ghosted outside cryo[special_role ? " as [special_role]" : ""]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>JMP</a>)",usr)
+			log_and_message_admins("has ghosted outside cryo[special_role ? " as [special_role]" : ""]. (<A HREF='?_src_=holder;[HrefToken()];adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>JMP</a>)",usr)
 		else if(special_role)
-			log_and_message_admins("has ghosted in cryo as [special_role]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>JMP</a>)",usr)
+			log_and_message_admins("has ghosted in cryo as [special_role]. (<A HREF='?_src_=holder;[HrefToken()];adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>JMP</a>)",usr)
 		var/mob/observer/dead/ghost = ghostize(0)	// 0 parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
 		if(ghost)
 			ghost.timeofdeath = world.time 	// Because the living mob won't have a time of death and we want the respawn timer to work properly.
@@ -455,7 +455,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 		return
 	if(get_z(target) in using_map?.secret_levels)
-		to_chat(src, SPAN_WARNING("Sorry, that target is in an area that ghosts aren't allowed to go."))
+		to_chat(src, "<span class='warning'>Sorry, that target is in an area that ghosts aren't allowed to go.</span>")
 		return
 	if(target != src)
 		if(following && following == target)
@@ -463,7 +463,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		following = target
 		to_chat(src, "<span class='notice'>Now following [target]</span>")
 		if(ismob(target))
-			forceMove(get_turf(target))
+			var/target_turf = get_turf(target)
+			if(!target_turf)
+				to_chat(usr, "<span class='warning'>This mob does not seem to exist in the tangible world.</span>")
+				return
+			forceMove(target_turf)
 			var/mob/M = target
 			M.following_mobs += src
 		else

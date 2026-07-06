@@ -489,6 +489,12 @@
 	initial_flooring = /decl/flooring/snow
 	var/list/crossed_dirs = list()
 
+/turf/simulated/floor/fakesnow
+	name = "fake snow"
+	icon = 'icons/turf/outdoors.dmi'
+	icon_state = "snow"
+	initial_flooring = /decl/flooring/snow/fake
+
 /turf/simulated/floor/snow/snow2
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
@@ -514,7 +520,9 @@
 /turf/simulated/floor/snow/Entered(atom/A)
 	if(isliving(A))
 		var/mob/living/L = A
-		if(L.hovering) // Flying things shouldn't make footprints.
+		if(L.hovering || L.flying) // Flying things shouldn't make footprints.
+			if(L.flying)
+				L.adjust_nutrition(-0.5)
 			return ..()
 		var/mdir = "[A.dir]"
 		crossed_dirs[mdir] = 1

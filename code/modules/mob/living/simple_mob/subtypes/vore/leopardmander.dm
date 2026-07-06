@@ -7,6 +7,7 @@
 	icon_dead = "leopardmander-dead"
 	icon_living = "leopardmander"
 	icon_state = "leopardmander"
+	icon_rest = "leopardmander-rest"
 	faction = "neutral"
 	meat_amount = 40 //I mean...
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
@@ -34,19 +35,20 @@
 	can_buckle = TRUE
 	buckle_movable = TRUE
 	buckle_lying = FALSE
-	vore_icons = SA_ICON_LIVING
 	vore_bump_chance = 50
 	vore_digest_chance = 0
 	vore_escape_chance = 50
 	vore_pounce_chance = 100
 	vore_active = 1
-	vore_icons = 4
+	vore_icons = SA_ICON_LIVING|SA_ICON_REST
 	vore_capacity = 4
 	swallowTime = 100
 	vore_default_mode = DM_HEAL
 	vore_pounce_maxhealth = 125
 	vore_bump_emote = "tries to snap up"
 	max_tox = 0 // for virgo3b survivability
+
+	nom_mob = TRUE
 
 /datum/category_item/catalogue/fauna/leopardmander
 	name = "Sivian Fauna - Va'aen Drake"
@@ -114,6 +116,7 @@
 	icon_dead = "leopardmander_blue-dead"
 	icon_living = "leopardmander_blue"
 	icon_state = "leopardmander_blue"
+	icon_rest = "leopardmander_blue-rest"
 
 /mob/living/simple_mob/vore/leopardmander/exotic
 	name = "glass-belly leopardmander"
@@ -122,6 +125,7 @@
 	icon_dead = "leopardmander_exotic-dead"
 	icon_living = "leopardmander_exotic"
 	icon_state = "leopardmander_exotic"
+	icon_rest = "leopardmander_exotic-rest"
 
 	glow_toggle = TRUE //Glow!
 	glow_range = 2

@@ -20,6 +20,7 @@
 	icon_dead = "pakkun-dead"
 	icon_living = "pakkun"
 	icon_state = "pakkun"
+	icon_rest = "pakkun-rest"
 	icon = 'icons/mob/vore.dmi'
 
 	faction = "pakkun"
@@ -46,8 +47,53 @@
 	projectilesound = 'sound/effects/slime_squish.ogg'
 
 	ai_holder_type = /datum/ai_holder/simple_mob/ranged/pakkun
+	vore_default_mode = DM_SELECT
 
 	var/extra_posessive = FALSE					// Enable if you want their tummy hugs to be inescapable
+	var/autorest_cooldown = 100
+
+	nom_mob = TRUE
+
+/mob/living/simple_mob/vore/pakkun/Life()
+	. = ..()
+	if(client)
+		return
+	if(!ai_holder)
+		return
+
+	if(autorest_cooldown)
+		autorest_cooldown --
+	else if(prob(5) && (resting || ai_holder.stance == STANCE_IDLE))
+		autorest_cooldown = rand(50,200)
+		lay_down()
+
+/mob/living/simple_mob/vore/pakkun/lay_down()
+	. = ..()
+	if(client)
+		return
+	if(!ai_holder)
+		return
+
+	if(resting)
+		vore_selected.digest_mode = DM_UNABSORB
+		ai_holder.go_sleep()
+
+	else
+		vore_selected.digest_mode = vore_default_mode
+		ai_holder.go_wake()
+
+/mob/living/simple_mob/vore/pakkun/attack_hand(mob/user)
+	if(stat == DEAD)
+		return ..()
+	if(user.a_intent != I_HELP)
+		return ..()
+	if(resting)
+		playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		user.visible_message("<span class='notice'>\The [user] shakes \the [src] awake.</span>","<span class='notice'>You shake \the [src] awake!</span>")
+		lay_down()
+		return
+	else
+		return ..()
 
 /datum/ai_holder/simple_mob/ranged/pakkun
 	pointblank = TRUE
@@ -65,7 +111,7 @@
 			continue
 	if(istype(holder, /mob/living/simple_mob))
 		var/mob/living/simple_mob/SM = holder
-		our_targets -= SM.prey_excludes
+		our_targets -= SM.prey_excludes // Lazylist, but subtracting a null from the list seems fine.
 	return our_targets
 
 /datum/ai_holder/simple_mob/ranged/pakkun/can_attack(atom/movable/the_target, var/vision_required = TRUE)
@@ -76,14 +122,14 @@
 			return FALSE
 		if(istype(holder, /mob/living/simple_mob))
 			var/mob/living/simple_mob/SM = holder
-			if(L in SM.prey_excludes)
+			if(LAZYFIND(SM.prey_excludes, L))
 				return FALSE
 	else
 		return FALSE
 
 /mob/living/simple_mob/vore/pakkun/on_throw_vore_special(var/pred, var/mob/living/target)
-	if(pred && !extra_posessive)
-		prey_excludes += target
+	if(pred && !extra_posessive && !(LAZYFIND(prey_excludes, target)))
+		LAZYSET(prey_excludes, target, world.time)
 		addtimer(CALLBACK(src, .proc/removeMobFromPreyExcludes, weakref(target)), 5 MINUTES)
 	if(ai_holder)
 		ai_holder.remove_target()
@@ -107,8 +153,8 @@
         user.visible_message("<span class='info'>[user] swats [src] with [O]!</span>")
         release_vore_contents()
         for(var/mob/living/L in living_mobs(0))
-            if(!(L in prey_excludes))
-                prey_excludes += L
+            if(!(LAZYFIND(prey_excludes, L)))
+                LAZYSET(prey_excludes, L, world.time)
                 addtimer(CALLBACK(src, .proc/removeMobFromPreyExcludes, weakref(L)), 5 MINUTES)
     else
         ..()
@@ -121,6 +167,7 @@
 	icon_dead = "snapdragon-dead"
 	icon_living = "snapdragon"
 	icon_state = "snapdragon"
+	icon_rest = "snapdragon-rest"
 
 	extra_posessive = TRUE //you're gonna get KEPT, at least the first time you go in
 	maxHealth = 100
@@ -138,8 +185,12 @@
 	icon_dead = "snappy-dead"
 	icon_living = "snappy"
 	icon_state = "snappy"
+	icon_rest = "snappy-rest"
+	digestable = 0 // pet mob, do not eat
+	devourable = 0
 
 	ai_holder_type = /datum/ai_holder/simple_mob/ranged/pakkun/snappy
+	vore_default_mode = DM_HOLD
 	var/list/petters = list()
 
 /datum/ai_holder/simple_mob/ranged/pakkun/snappy/list_targets()
@@ -164,6 +215,11 @@
 		petters += M //YOU HAVE OFFERED YOURSELF TO THE LIZARD
 	return ..()
 
+/mob/living/simple_mob/vore/pakkun/snapdragon/snappy/lay_down()
+	if(LAZYLEN(petters) && prob(50) && !resting) //50% chance she'll forgive a random person when she takes a nap
+		petters -= pick(petters)
+	..()
+
 /mob/living/simple_mob/vore/pakkun/snapdragon/snappy/init_vore()
 	..()
 	var/obj/belly/B = vore_selected
@@ -172,4 +228,3 @@
 	most of her girth. Your movements are rewarded only with squeezing from outside, the skin of the reptile easily stretching out to match your movements no matter how hard you try to push. If anything, \
 	wriggling about just seems to prompt the playful creature to mess with you more, mooshing her paws into the bulges you make, wrapping both arms around you and squeezing you tight, making it absolutely \
 	plain that she's more than happy to just keep you in there - and is more than capable of doing so if she so chooses."
-

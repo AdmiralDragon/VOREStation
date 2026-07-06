@@ -127,7 +127,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/despawn_player,
 	/datum/admins/proc/view_feedback,
 	/client/proc/make_mentor,
-	/client/proc/unmake_mentor
+	/client/proc/unmake_mentor,
+	/client/proc/removetickets,
+	/client/proc/delbook
 	)
 
 var/list/admin_verbs_ban = list(
@@ -230,7 +232,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_debug_tog_aliens,
 	/client/proc/cmd_display_del_log,
 	/client/proc/cmd_display_init_log,
-	/client/proc/cmd_display_overlay_log,
+	// /client/proc/cmd_display_overlay_log,
 	/client/proc/air_report,
 	/client/proc/reload_admins,
 	/client/proc/reload_eventMs,

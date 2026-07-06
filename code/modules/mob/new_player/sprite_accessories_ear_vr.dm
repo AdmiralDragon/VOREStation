@@ -32,6 +32,14 @@
 
 // Ears avaliable to anyone
 
+/datum/sprite_accessory/ears/alien_slug
+	name = "Alien slug antennae"
+	desc = ""
+	icon = 'icons/mob/vore/ears_vr.dmi'
+	icon_state = "alien_slug"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+
 /datum/sprite_accessory/ears/taj_ears
 	name = "tajaran, colorable (old)"
 	species_allowed = list(SPECIES_HUMAN, SPECIES_SKRELL, SPECIES_UNATHI, SPECIES_TAJ, SPECIES_TESHARI, SPECIES_NEVREAN, SPECIES_AKULA, SPECIES_SERGAL, SPECIES_FENNEC, SPECIES_ZORREN_HIGH, SPECIES_VULPKANIN, SPECIES_XENOCHIMERA, SPECIES_XENOHYBRID, SPECIES_VASILISSAN, SPECIES_RAPALA, SPECIES_PROTEAN, SPECIES_ALRAUNE, SPECIES_WEREBEAST, SPECIES_SHADEKIN, SPECIES_SHADEKIN_CREW, SPECIES_ALTEVIAN) //This lets all races use
@@ -860,7 +868,7 @@
 	extra_overlay = "altevian-inner"
 	do_colouration = 1
 	color_blend_mode = ICON_MULTIPLY
-	
+
 /datum/sprite_accessory/ears/wilddog
 	name = "Wild Dog Ears"
 	desc = ""
@@ -869,3 +877,22 @@
 	do_colouration = 1
 	color_blend_mode = ICON_MULTIPLY
 	extra_overlay = "wild_doginner"
+
+/datum/sprite_accessory/ears/teshbeeantenna
+	name = "Teshari bee antenna"
+	icon = 'icons/mob/vore/ears_vr.dmi'
+	icon_state = "teshbee"
+
+/datum/sprite_accessory/ears/teshantenna
+	name = "Teshari antenna, colorable"
+	icon = 'icons/mob/vore/ears_vr.dmi'
+	icon_state = "teshantenna"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+
+/datum/sprite_accessory/ears/curlyteshantenna
+	name = "Teshari curly antenna, colorable"
+	icon = 'icons/mob/vore/ears_vr.dmi'
+	icon_state = "curly_bug_tesh"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY

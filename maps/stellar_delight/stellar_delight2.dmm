@@ -340,13 +340,6 @@
 	},
 /turf/simulated/floor/tiled,
 /area/hydroponics)
-"aH" = (
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/mob/living/simple_mob/vore/alienanimals/teppi/baby,
-/turf/simulated/floor/grass,
-/area/hydroponics)
 "aI" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -406,11 +399,6 @@
 /obj/random/tech_supply,
 /turf/simulated/floor/tiled/eris/dark/orangecorner,
 /area/engineering/engine_eva)
-"aP" = (
-/obj/structure/disposalpipe/segment,
-/mob/living/simple_mob/vore/alienanimals/teppi/baby,
-/turf/simulated/floor/grass,
-/area/hydroponics)
 "aQ" = (
 /obj/structure/grille,
 /turf/simulated/floor/airless,
@@ -615,8 +603,8 @@
 	pixel_y = 6
 	},
 /obj/structure/sign/directions{
-	desc = "A direction sign, pointing out the way to Exploration.";
-	name = "\improper Exploration Department";
+	desc = "A direction sign, pointing out the way to the shuttle bay.";
+	name = "\improper Shuttle Bay";
 	pixel_x = 32;
 	pixel_y = -6
 	},
@@ -685,8 +673,8 @@
 	pixel_y = 6
 	},
 /obj/structure/sign/directions{
-	desc = "A direction sign, pointing out the way to Exploration.";
-	name = "\improper Exploration Department";
+	desc = "A direction sign, pointing out the way to the shuttle bay.";
+	name = "\improper Shuttle Bay";
 	pixel_x = -32;
 	pixel_y = -6
 	},
@@ -1477,15 +1465,23 @@
 /area/stellardelight/deck2/fore)
 "cZ" = (
 /obj/item/device/flashlight/lamp/green{
+	pixel_x = 7;
+	pixel_y = 16
+	},
+/obj/item/weapon/folder/blue_captain{
+	pixel_x = -6;
 	pixel_y = 7
 	},
-/obj/item/weapon/folder/blue_captain,
 /obj/structure/table/darkglass,
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
 /obj/machinery/requests_console/preset/captain{
 	pixel_x = -30
+	},
+/obj/item/weapon/melee/chainofcommand,
+/obj/item/weapon/folder/blue_captain{
+	pixel_x = -6
 	},
 /turf/simulated/floor/carpet/blucarpet,
 /area/crew_quarters/captain)
@@ -1780,6 +1776,18 @@
 /turf/simulated/floor/grass,
 /area/hydroponics)
 "dG" = (
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/obj/structure/closet/walllocker_double/north{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
 /obj/effect/floor_decal/emblem/stellardelight{
 	dir = 9
 	},
@@ -1902,9 +1910,6 @@
 	},
 /obj/machinery/camera/network/engineering{
 	dir = 4
-	},
-/obj/structure/sign/scenery/fakefireaxe{
-	pixel_x = -32
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/engineering/atmos/monitoring)
@@ -2622,6 +2627,25 @@
 	},
 /turf/simulated/floor/tiled/eris/white/cargo,
 /area/stellardelight/deck2/triage)
+"fy" = (
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/obj/structure/closet/crate/medical{
+	desc = "A crate full of emergency supplies to help with response and rescue operations. A logo of NanoTrasen with a checkmark is stamped on the crate.";
+	name = "NanoTrasen Emergency Supply Crate"
+	},
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/storage/firstaid/adv,
+/obj/item/weapon/storage/firstaid/regular,
+/obj/item/bodybag/cryobag,
+/obj/item/bodybag/cryobag,
+/turf/simulated/floor/tiled/eris/dark/monofloor,
+/area/bridge)
 "fz" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply{
@@ -3064,6 +3088,24 @@
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/engineering/atmos/monitoring)
+"gz" = (
+/obj/effect/floor_decal/steeldecal/steel_decals5{
+	dir = 4
+	},
+/obj/structure/closet/walllocker_double/east{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/tiled,
+/area/stellardelight/deck2/port)
 "gA" = (
 /obj/structure/railing/grey{
 	dir = 4
@@ -4135,6 +4177,9 @@
 /obj/item/weapon/reagent_containers/glass/beaker/large,
 /obj/item/weapon/reagent_containers/dropper,
 /obj/machinery/atmospherics/unary/vent_pump/on,
+/obj/machinery/injector_maker{
+	pixel_y = 21
+	},
 /turf/simulated/floor/tiled/eris/white/bluecorner,
 /area/medical/chemistry)
 "jg" = (
@@ -4394,9 +4439,6 @@
 /area/stellardelight/deck2/fore)
 "jK" = (
 /obj/structure/table/glass,
-/obj/machinery/camera/network/medbay{
-	dir = 4
-	},
 /turf/simulated/floor/tiled/eris/white/bluecorner,
 /area/stellardelight/deck2/triage)
 "jL" = (
@@ -5474,9 +5516,9 @@
 	pixel_y = 6
 	},
 /obj/structure/sign/directions{
-	desc = "A direction sign, pointing out the way to Exploration.";
+	desc = "A direction sign, pointing out the way to the shuttle bay.";
 	dir = 1;
-	name = "\improper Exploration Department";
+	name = "\improper Shuttle Bay";
 	pixel_x = 32;
 	pixel_y = -12
 	},
@@ -6107,6 +6149,24 @@
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/tiled/eris/dark/danger,
 /area/engineering/engine_room)
+"nh" = (
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/obj/structure/closet/walllocker_double/west{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
+/obj/effect/floor_decal/milspec/color/green/half{
+	dir = 8
+	},
+/turf/simulated/floor/tiled,
+/area/stellardelight/deck2/fore)
 "ni" = (
 /turf/simulated/wall/bay/r_wall/steel,
 /area/engineering/engine_room)
@@ -10520,14 +10580,14 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/engineering/atmos/storage)
 "xv" = (
-/obj/item/weapon/melee/chainofcommand,
-/obj/item/weapon/coin/phoron{
-	desc = "The face of the coin shows a portrait of the explorer who discovered the Virgo-Erigone system. The back depicts a Zodiac symbol that represents Virgo.";
-	name = "limited edition phoron coin"
-	},
-/obj/item/weapon/folder/blue_captain,
-/obj/item/weapon/stamp/captain,
 /obj/structure/table/darkglass,
+/obj/machinery/computer/skills{
+	pixel_x = 9
+	},
+/obj/item/weapon/paper_bin{
+	pixel_x = -7;
+	pixel_y = -2
+	},
 /turf/simulated/floor/carpet/blucarpet,
 /area/crew_quarters/captain)
 "xw" = (
@@ -10755,6 +10815,24 @@
 /obj/structure/low_wall/bay/reinforced/steel,
 /turf/simulated/floor,
 /area/stellardelight/deck2/combustionworkshop)
+"xS" = (
+/obj/effect/floor_decal/steeldecal/steel_decals5{
+	dir = 4
+	},
+/obj/structure/closet/walllocker_double/east{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/tiled,
+/area/stellardelight/deck2/fore)
 "xT" = (
 /obj/structure/cable/green{
 	icon_state = "1-2"
@@ -11720,6 +11798,7 @@
 /obj/structure/cable/blue{
 	icon_state = "1-2"
 	},
+/obj/machinery/papershredder,
 /turf/simulated/floor/wood,
 /area/stellardelight/deck2/briefingroom)
 "Ae" = (
@@ -12031,9 +12110,6 @@
 /turf/simulated/floor/lino,
 /area/crew_quarters/bar)
 "AO" = (
-/obj/machinery/computer/skills{
-	pixel_y = 7
-	},
 /obj/structure/table/darkglass,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 9
@@ -12042,6 +12118,16 @@
 	id = "captaindoor";
 	pixel_x = -15;
 	pixel_y = 2
+	},
+/obj/item/weapon/stamp/captain{
+	pixel_x = 10;
+	pixel_y = 6
+	},
+/obj/item/weapon/coin/phoron{
+	desc = "The face of the coin shows a portrait of the explorer who discovered the Virgo-Erigone system. The back depicts a Zodiac symbol that represents Virgo.";
+	name = "limited edition phoron coin";
+	pixel_x = 11;
+	pixel_y = -3
 	},
 /turf/simulated/floor/carpet/blucarpet,
 /area/crew_quarters/captain)
@@ -14121,7 +14207,7 @@
 	input_tag = "cooling_in";
 	name = "Engine Cooling Control";
 	output_tag = "cooling_out";
-	sensors = list("burn_chamber"="Burn Chamber");
+	sensors = list("burn_chamber" = "Burn Chamber");
 	throwpass = 1
 	},
 /turf/simulated/floor,
@@ -14530,6 +14616,24 @@
 	},
 /turf/simulated/floor/tiled,
 /area/stellardelight/deck2/fore)
+"Gk" = (
+/obj/effect/floor_decal/steeldecal/steel_decals5{
+	dir = 4
+	},
+/obj/structure/closet/walllocker_double/east{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/tiled,
+/area/stellardelight/deck2/starboard)
 "Gl" = (
 /obj/machinery/light/small{
 	dir = 4
@@ -14657,7 +14761,7 @@
 	frequency = 1443;
 	level = 3;
 	name = "Distribution and Waste Monitor";
-	sensors = list("dist_main_meter"="Surface - Distribution Loop","scrub_main_meter"="Surface - Scrubbers Loop","mair_main_meter"="Surface - Mixed Air Tank","dist_aux_meter"="Station - Distribution Loop","scrub_aux_meter"="Station - Scrubbers Loop","mair_aux_meter"="Station - Mixed Air Tank","mair_mining_meter"="Mining Outpost - Mixed Air Tank")
+	sensors = list("dist_main_meter" = "Surface - Distribution Loop", "scrub_main_meter" = "Surface - Scrubbers Loop", "mair_main_meter" = "Surface - Mixed Air Tank", "dist_aux_meter" = "Station - Distribution Loop", "scrub_aux_meter" = "Station - Scrubbers Loop", "mair_aux_meter" = "Station - Mixed Air Tank", "mair_mining_meter" = "Mining Outpost - Mixed Air Tank")
 	},
 /obj/machinery/power/apc/angled{
 	dir = 1
@@ -18441,7 +18545,7 @@
 	name = "box of measuring cups";
 	pixel_x = 2;
 	pixel_y = 3;
-	starts_with = list(/obj/item/weapon/reagent_containers/glass/beaker/measuring_cup=7)
+	starts_with = list(/obj/item/weapon/reagent_containers/glass/beaker/measuring_cup = 7)
 	},
 /turf/simulated/floor/tiled/eris/cafe,
 /area/crew_quarters/kitchen)
@@ -18681,9 +18785,6 @@
 	},
 /obj/structure/flora/pottedplant/smallcactus{
 	pixel_y = 14
-	},
-/obj/structure/fireaxecabinet{
-	pixel_y = 28
 	},
 /turf/simulated/floor/wood,
 /area/stellardelight/deck2/briefingroom)
@@ -21222,12 +21323,6 @@
 	},
 /turf/simulated/floor/tiled/eris/dark/techfloor_grid,
 /area/storage/tech)
-"UW" = (
-/obj/structure/sign/poster{
-	dir = 1
-	},
-/turf/simulated/floor/tiled/eris/dark/cargo,
-/area/crew_quarters/recreation_area)
 "UX" = (
 /obj/structure/table/gamblingtable,
 /turf/simulated/floor/carpet,
@@ -22130,6 +22225,9 @@
 	},
 /obj/machinery/camera/network/medbay{
 	dir = 8
+	},
+/obj/machinery/injector_maker{
+	pixel_x = 29
 	},
 /turf/simulated/floor/tiled/eris/white/bluecorner,
 /area/stellardelight/deck2/triage)
@@ -23268,6 +23366,21 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor/tiled/techmaint,
 /area/storage/primary)
+"ZB" = (
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/device/radio,
+/obj/item/weapon/storage/briefcase/inflatable,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/weapon/tank/emergency/oxygen/engi,
+/obj/item/clothing/mask/breath,
+/obj/item/clothing/mask/breath,
+/obj/structure/closet/walllocker_double/south{
+	desc = "A wall mounted storage cabinet marked with a cross and warning icon. This seems to contain an assortment of emergency supplies.";
+	name = "Emergency Cabinet"
+	},
+/turf/simulated/floor/tiled/eris/white/cargo,
+/area/stellardelight/deck2/triage)
 "ZC" = (
 /obj/item/weapon/stool/padded{
 	dir = 8
@@ -31078,7 +31191,7 @@ sA
 iZ
 ii
 WN
-aH
+ok
 LS
 Jp
 KK
@@ -31221,7 +31334,7 @@ wP
 JI
 fa
 aJ
-aP
+rP
 rP
 hf
 Nw
@@ -31249,7 +31362,7 @@ Cj
 tP
 tU
 jd
-Cj
+gz
 Bf
 NG
 cO
@@ -31781,7 +31894,7 @@ zO
 Qe
 Qe
 Qe
-Qe
+nh
 PZ
 GY
 Qe
@@ -32911,7 +33024,7 @@ VG
 KH
 zz
 nt
-UW
+mt
 Bp
 oS
 oS
@@ -32955,7 +33068,7 @@ wz
 RQ
 Ze
 Eo
-Ze
+ZB
 QP
 gu
 Kf
@@ -33641,7 +33754,7 @@ jU
 TP
 Ld
 Uj
-Zj
+fy
 Zj
 rN
 ry
@@ -33807,7 +33920,7 @@ zD
 ik
 Ze
 og
-Ze
+ZB
 QP
 sJ
 nJ
@@ -34899,7 +35012,7 @@ FA
 Zr
 sj
 FU
-Zr
+xS
 Zr
 vj
 pZ
@@ -35790,7 +35903,7 @@ Tk
 yu
 IX
 Mk
-Mk
+Gk
 LH
 Mk
 pm

@@ -414,7 +414,7 @@
 
 	roundstart = 0
 	mysterious = 1
-	seed_noun = pick("spores","nodes","cuttings","seeds")
+	seed_noun = pick("spores","nodes","cuttings","seeds","pits")
 
 	set_trait(TRAIT_POTENCY,rand(5,30),200,0)
 	set_trait(TRAIT_PRODUCT_ICON,pick(SSplants.accessible_product_sprites))
@@ -826,12 +826,10 @@
 				product = new has_item_product(get_turf(user))
 			else
 				product = new /obj/item/weapon/reagent_containers/food/snacks/grown(get_turf(user),name)
-			if(get_trait(TRAIT_PRODUCT_COLOUR))
-				if(!istype(product, /mob))
-					product.color = get_trait(TRAIT_PRODUCT_COLOUR)
-					if(istype(product,/obj/item/weapon/reagent_containers/food))
-						var/obj/item/weapon/reagent_containers/food/food = product
-						food.filling_color = get_trait(TRAIT_PRODUCT_COLOUR)
+			if (get_trait(TRAIT_PRODUCT_COLOUR))
+				if (istype(product,/obj/item/weapon/reagent_containers/food))
+					var/obj/item/weapon/reagent_containers/food/food = product
+					food.filling_color = get_trait(TRAIT_PRODUCT_COLOUR)
 
 			if(mysterious)
 				product.name += "?"

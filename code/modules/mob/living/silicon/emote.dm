@@ -13,11 +13,12 @@ var/list/_silicon_default_emotes = list(
 )
 
 /mob/living/silicon/get_available_emotes()
-	return global._silicon_default_emotes
+	return global._silicon_default_emotes.Copy()
 
 /mob/living/silicon/pai/get_available_emotes()
 
-	var/list/fulllist = _silicon_default_emotes
+	var/list/fulllist = list()
+	fulllist |= _silicon_default_emotes
 	fulllist |= _robot_default_emotes
 	fulllist |= _human_default_emotes
 	return fulllist

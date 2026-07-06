@@ -22,6 +22,15 @@
 
 // Everyone tails
 
+/datum/sprite_accessory/tail/alien_slug
+	name = "Alien slug tail"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "alien_slug"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "alien_slug_markings"
+
 /datum/sprite_accessory/tail/invisible
 	name = "hide species-sprite tail"
 	icon = null
@@ -1200,6 +1209,117 @@
 	ani_state = "tentacle_w"
 	do_colouration = 1
 	color_blend_mode = ICON_MULTIPLY
+
+/datum/sprite_accessory/tail/perrin_tentacles
+	name = "octopus tentacles"
+	desc = ""
+	icon_state = "perrintentacles"
+	ckeys_allowed = list("codeme", "siennaathens")
+
+/datum/sprite_accessory/tail/teshbeethorax
+	name = "Teshari bee thorax"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "beethorax_tesh"
+
+/datum/sprite_accessory/tail/teshbuggo
+	name = "Teshari bug abdomen, colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbug_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+
+/datum/sprite_accessory/tail/teshbuggobee
+	name = "Teshari bug abdomen, bee top, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbug_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshbee_markings"
+
+/datum/sprite_accessory/tail/teshbeefull
+	name = "Teshari bug abdomen, bee full, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbug_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshbeefull_markings"
+
+/datum/sprite_accessory/tail/teshbuggounder
+	name = "Teshari bug abdomen, underside, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbug_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshunder_markings"
+
+/datum/sprite_accessory/tail/teshbuggofirefly
+	name = "Teshari bug abdomen, firefly, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbug_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshfirefly_markings"
+
+/datum/sprite_accessory/tail/fatteshbuggo
+	name = "Teshari fat bug abdomen, colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbugfat_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+
+/datum/sprite_accessory/tail/fatteshbuggobee
+	name = "Teshari fat bug abdomen, bee top, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbugfat_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshfatbee_markings"
+
+/datum/sprite_accessory/tail/fatteshbeefull
+	name = "Teshari fat bug abdomen, bee full, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbugfat_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshfatbeefull_markings"
+
+/datum/sprite_accessory/tail/fatteshbuggounder
+	name = "Teshari fat bug abdomen, underside, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbugfat_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshfatunder_markings"
+
+/datum/sprite_accessory/tail/fatteshbuggofirefly
+	name = "Teshari fat bug abdomen, firefly, dual-colorable"
+	desc = ""
+	icon = 'icons/mob/vore/tails_vr.dmi'
+	icon_state = "teshbugfat_s"
+	do_colouration = 1
+	color_blend_mode = ICON_MULTIPLY
+	extra_overlay = "teshfatfirefly_markings"
+
+/datum/sprite_accessory/tail/synthetic_stilt_legs
+	name = "synthetic stilt-legs, colorable"
+	desc = ""
+	icon_state = "synth_stilts"
+	color_blend_mode = ICON_MULTIPLY
+	do_colouration = 1
+	extra_overlay = "synth_stilts_marking"
+	hide_body_parts = list(BP_L_LEG, BP_L_FOOT, BP_R_LEG, BP_R_FOOT) //Exclude pelvis just in case.
+	clip_mask_icon = 'icons/mob/vore/taurs_vr.dmi'
+	clip_mask_state = "taur_clip_mask_def" //Used to clip off the lower part of suits & uniforms.
 
 //LONG TAILS ARE NOT TAUR BUTTS >:O
 /datum/sprite_accessory/tail/longtail

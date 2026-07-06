@@ -208,7 +208,7 @@ var/global/list/damage_icon_parts = list() //see UpdateDamageIcon()
 
 	// blend the individual damage states with our icons
 	for(var/obj/item/organ/external/O in organs)
-		if(isnull(O) || O.is_stump() || O.is_hidden_by_tail())
+		if(isnull(O) || O.is_stump() || O.is_hidden_by_sprite_accessory())
 			continue
 
 		O.update_icon()
@@ -264,10 +264,16 @@ var/global/list/damage_icon_parts = list() //see UpdateDamageIcon()
 	var/obj/item/organ/external/head/head = organs_by_name[BP_HEAD]
 	if(head)
 		if(!istype(head, /obj/item/organ/external/stump))
+			if (species.selects_bodytype != SELECTS_BODYTYPE_FALSE)
+				var/headtype = GLOB.all_species[species.base_species]?.has_limbs[BP_HEAD]
+				var/obj/item/organ/external/head/headtypepath = headtype["path"]
+				if (headtypepath)
+					head.eye_icon = initial(headtypepath.eye_icon)
+					head.eye_icon_location = initial(headtypepath.eye_icon_location)
 			icon_key += "[head.eye_icon]"
 	for(var/organ_tag in species.has_limbs)
 		var/obj/item/organ/external/part = organs_by_name[organ_tag]
-		if(isnull(part) || part.is_stump() || part.is_hidden_by_tail()) //VOREStation Edit allowing tails to prevent bodyparts rendering, granting more spriter freedom for taur/digitigrade stuff.
+		if(isnull(part) || part.is_stump() || part.is_hidden_by_sprite_accessory()) //VOREStation Edit allowing tails to prevent bodyparts rendering, granting more spriter freedom for taur/digitigrade stuff.
 			icon_key += "0"
 			continue
 		if(part)
@@ -332,7 +338,7 @@ var/global/list/damage_icon_parts = list() //see UpdateDamageIcon()
 				Cutter.Blend("#000000", ICON_MULTIPLY)	// Black again.
 
 		for(var/obj/item/organ/external/part in organs)
-			if(isnull(part) || part.is_stump() || part.is_hidden_by_tail()) //VOREStation Edit allowing tails to prevent bodyparts rendering, granting more spriter freedom for taur/digitigrade stuff.
+			if(isnull(part) || part.is_stump() || part.is_hidden_by_sprite_accessory()) //VOREStation Edit allowing tails to prevent bodyparts rendering, granting more spriter freedom for taur/digitigrade stuff.
 				continue
 			var/icon/temp = part.get_icon(skeleton)
 
@@ -755,7 +761,7 @@ var/global/list/damage_icon_parts = list() //see UpdateDamageIcon()
 
 	for(var/f in list(BP_L_FOOT, BP_R_FOOT))
 		var/obj/item/organ/external/foot/foot = get_organ(f)
-		if(istype(foot) && foot.is_hidden_by_tail()) //If either foot is hidden by the tail, don't render footwear.
+		if(istype(foot) && foot.is_hidden_by_sprite_accessory(clothing_only = TRUE)) //If either foot is hidden by the tail, don't render footwear.
 			return
 
 	//Allow for shoe layer toggle nonsense
@@ -1266,7 +1272,7 @@ var/global/list/damage_icon_parts = list() //see UpdateDamageIcon()
 	if(tail_style && !(wear_suit && wear_suit.flags_inv & HIDETAIL && !istaurtail(tail_style)) && !tail_hidden)
 		var/icon/tail_s = new/icon("icon" = tail_style.icon, "icon_state" = (tail_style.can_loaf && resting) ? "[tail_style.icon_state]_loaf" : (wagging && tail_style.ani_state ? tail_style.ani_state : tail_style.icon_state)) // VOREStation Edit: Taur Loafing
 		if(tail_style.can_loaf && !is_shifted)
-			pixel_y = (resting) ? -tail_style.loaf_offset : 0 //move player down, then taur up, to fit the overlays correctly // VOREStation Edit: Taur Loafing
+			pixel_y = (resting) ? -tail_style.loaf_offset*size_multiplier : default_pixel_y //move player down, then taur up, to fit the overlays correctly // VOREStation Edit: Taur Loafing
 		if(tail_style.do_colouration)
 			tail_s.Blend(rgb(src.r_tail, src.g_tail, src.b_tail), tail_style.color_blend_mode)
 		if(tail_style.extra_overlay)
