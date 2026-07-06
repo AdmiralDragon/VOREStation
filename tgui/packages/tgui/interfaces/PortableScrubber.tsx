@@ -1,6 +1,7 @@
-import { useBackend } from '../backend';
-import { Slider, Section, LabeledList } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { LabeledList, Section, Slider } from 'tgui-core/components';
+
 import { PortableBasicInfo } from './common/PortableAtmos';
 
 type Data = {
@@ -9,8 +10,8 @@ type Data = {
   maxrate: number;
 };
 
-export const PortableScrubber = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const PortableScrubber = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { rate, minrate, maxrate } = data;
 

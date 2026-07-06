@@ -1,27 +1,26 @@
-import { useBackend } from '../backend';
-import { Box, Button, LabeledList, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Box, Button, LabeledList, Section } from 'tgui-core/components';
 
 type Data = {
+  theme?: string;
   current: {
     index: string;
     time: string;
     coords: string;
     depth: number;
-    clearance: number;
-    dissonance_spread: number;
     material: string;
   };
   positive_locations: { index: string; time: string; coords: string }[];
 };
 
-export const XenoarchDepthScanner = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const XenoarchDepthScanner = (props) => {
+  const { act, data } = useBackend<Data>();
 
-  const { current, positive_locations } = data;
+  const { theme, current, positive_locations } = data;
 
   return (
-    <Window width={300} height={500} resizable>
+    <Window width={300} height={500} theme={theme}>
       <Window.Content scrollable>
         {(Object.keys(current).length && (
           <Section
@@ -31,17 +30,23 @@ export const XenoarchDepthScanner = (props, context) => {
                 color="bad"
                 icon="trash"
                 confirmIcon="trash"
-                content="Delete Entry"
                 onClick={() => act('clear', { index: current.index })}
-              />
-            }>
+              >
+                Delete Entry
+              </Button.Confirm>
+            }
+          >
             <LabeledList>
               <LabeledList.Item label="Time">{current.time}</LabeledList.Item>
-              <LabeledList.Item label="Coords">{current.coords}</LabeledList.Item>
-              <LabeledList.Item label="Anomaly Depth">{current.depth} cm</LabeledList.Item>
-              <LabeledList.Item label="Anomaly Size">{current.clearance} cm</LabeledList.Item>
-              <LabeledList.Item label="Dissonance Spread">{current.dissonance_spread}</LabeledList.Item>
-              <LabeledList.Item label="Anomaly Material">{current.material}</LabeledList.Item>
+              <LabeledList.Item label="Coords">
+                {current.coords}
+              </LabeledList.Item>
+              <LabeledList.Item label="Anomaly Depth">
+                {current.depth} cm
+              </LabeledList.Item>
+              <LabeledList.Item label="Anomaly Material">
+                {current.material}
+              </LabeledList.Item>
             </LabeledList>
           </Section>
         )) ||
@@ -53,13 +58,19 @@ export const XenoarchDepthScanner = (props, context) => {
               color="red"
               icon="trash"
               confirmIcon="trash"
-              content="Delete All"
               onClick={() => act('clear')}
-            />
-          }>
+            >
+              Delete All
+            </Button.Confirm>
+          }
+        >
           {(positive_locations.length &&
             positive_locations.map((loc) => (
-              <Button key={loc.index} icon="eye" onClick={() => act('select', { select: loc.index })}>
+              <Button
+                key={loc.index}
+                icon="eye"
+                onClick={() => act('select', { select: loc.index })}
+              >
                 {loc.time}, {loc.coords}
               </Button>
             ))) || <Box color="bad">No traces found.</Box>}

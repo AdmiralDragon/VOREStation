@@ -1,9 +1,10 @@
-import { NtosWindow } from '../layouts';
+import { NtosWindow } from 'tgui/layouts';
+
 import { CrewManifestContent } from './CrewManifest';
 
 export const NtosCrewManifest = () => {
   return (
-    <NtosWindow width={800} height={600} resizable>
+    <NtosWindow width={800} height={600}>
       <NtosWindow.Content>
         <CrewManifestContent />
       </NtosWindow.Content>

@@ -3,7 +3,7 @@
 
 // proc to find out in how much pain the mob is at the moment
 /mob/living/carbon/proc/updateshock()
-	if (!can_feel_pain())
+	if (!can_feel_pain() && !synth_cosmetic_pain)
 		src.traumatic_shock = 0
 		return 0
 
@@ -19,19 +19,21 @@
 		src.traumatic_shock -= 20
 
 	// broken or ripped off organs will add quite a bit of pain
-	if(istype(src,/mob/living/carbon/human))
+	if(ishuman(src))
 		var/mob/living/carbon/human/M = src
 		for(var/obj/item/organ/external/organ in M.organs)
+			if(!organ.organ_can_feel_pain())
+				continue
 			if(organ.is_broken() || organ.open)
 				src.traumatic_shock += 30
 			else if(organ.is_dislocated())
 				src.traumatic_shock += 15
-	
+
 	// Some individuals/species are more or less supectible to pain. Default trauma_mod = 1. Does not affect painkillers
-	if(istype(src, /mob/living/carbon/human))
+	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		H.traumatic_shock *= H.species.trauma_mod
-		
+
 	src.traumatic_shock += -1 *  src.chem_effects[CE_PAINKILLER]
 
 	if(src.traumatic_shock < 0)

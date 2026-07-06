@@ -1,19 +1,20 @@
-import { useBackend } from '../backend';
-import { NtosWindow } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { NtosWindow } from 'tgui/layouts';
+import { Box, Button, NoticeBox, Section } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
+
 import { IdentificationComputerRegions } from './IdentificationComputer';
-import { NoticeBox, Box, Section, Button } from '../components';
-import { BooleanLike } from 'common/react';
 
 type Data = {
-  message: string;
+  message: string | null;
   running: BooleanLike;
   rate: number;
   factor: number;
-  regions: [];
+  regions: string[];
 };
 
-export const NtosAccessDecrypter = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const NtosAccessDecrypter = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { message, running, rate, factor, regions } = data;
 
@@ -37,7 +38,8 @@ export const NtosAccessDecrypter = (props, context) => {
         {(message && <NoticeBox>{message}</NoticeBox>) ||
           (running && (
             <Section>
-              Attempting to decrypt network access codes. Please wait. Rate: {rate} PHash/s
+              Attempting to decrypt network access codes. Please wait. Rate:{' '}
+              {rate} PHash/s
               <Box>
                 {/* I don't care anymore */}
                 {generate10String(lineLength)}
@@ -52,9 +54,9 @@ export const NtosAccessDecrypter = (props, context) => {
             </Section>
           )) || (
             <Section title="Pick access code to decrypt">
-              {(regions.length && <IdentificationComputerRegions actName="PRG_execute" />) || (
-                <Box>Please insert ID card.</Box>
-              )}
+              {(regions.length && (
+                <IdentificationComputerRegions actName="PRG_execute" />
+              )) || <Box>Please insert ID card.</Box>}
             </Section>
           )}
       </NtosWindow.Content>

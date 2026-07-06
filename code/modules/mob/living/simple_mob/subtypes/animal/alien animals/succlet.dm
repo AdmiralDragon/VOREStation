@@ -12,7 +12,7 @@
 
 	icon_state = "succlet"
 	icon_living = "succlet"
-	icon_dead = "succlet"
+	icon_dead = "succlet_dead"
 	icon_rest = "succlet"
 	icon = 'icons/mob/alienanimals_x32.dmi'
 
@@ -61,7 +61,8 @@
 	vore_smell = "some kind of snack from a distant unseen universe"
 
 	var/succlet_move_chance = 2
-	var/succlet_weaken_rate = 5
+	var/succlet_eat_chance = 50
+	var/succlet_weaken_rate = 2
 	var/succlet_last_health = 10
 
 /datum/say_list/succlet
@@ -71,19 +72,18 @@
 	say_maybe_target = list("...")
 	say_got_target = list("...")
 
-/mob/living/simple_mob/vore/alienanimals/succlet/init_vore()
-	..()
+/mob/living/simple_mob/vore/alienanimals/succlet/load_default_bellies()
+	. = ..()
 	var/obj/belly/B = vore_selected
 	B.name = "stummy"
 	B.desc = "It's a star shaped stomach. A stummy, if you will. It's warm and soft, not unlike plush, but it's tight!"
 	B.mode_flags = DM_FLAG_THICKBELLY | DM_FLAG_NUMBING
-	B.belly_fullscreen = "yet_another_tumby"
 	B.digest_brute = 0
 	B.digest_burn = 0
 	B.digest_oxy = 12
 	B.digestchance = 0
 	B.absorbchance = 0
-	B.escapechance = 10
+	B.escapechance = 35
 	B.selective_preference = DM_ABSORB
 
 /mob/living/simple_mob/vore/alienanimals/succlet/checkMoveCooldown()
@@ -120,22 +120,26 @@
 			for(var/turf/T in view(world.view, get_turf(src)))	//No, so let's pick a turf to travel to
 				if(isturf(T))
 					mylist |= T
-			succlet_move(pick(mylist))
+			if(mylist.len)
+				succlet_move(pick(mylist))
 	succlet_last_health = health	//The succlet will try to move if it has taken damage
 
-/mob/living/simple_mob/vore/alienanimals/succlet/death()
+/mob/living/simple_mob/vore/alienanimals/succlet/death(gibbed, deathmessage = "shrieks in agony as it is eradicated from reality.")
 	. = ..()
-	spawn(10)
+	if(isbelly(loc))
+		return
+	playsound(src,'sound/voice/succlet_shriek.ogg', 100, 1)
+	spawn(25)
 	qdel(src)
 
-/mob/living/simple_mob/vore/alienanimals/succlet/attackby(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/newspaper) && !ckey && isturf(user.loc))
-		user.visible_message("<span class='info'>[user] swats [src] with [O]!</span>")
+/mob/living/simple_mob/vore/alienanimals/succlet/attackby(obj/item/O, mob/user)
+	if(istype(O, /obj/item/newspaper) && !ckey && isturf(user.loc))
+		user.visible_message(span_info("[user] swats [src] with [O]!"))
 		release_vore_contents()
 	else
 		..()
 
-/mob/living/simple_mob/vore/alienanimals/succlet/proc/succlet_move(var/target)
+/mob/living/simple_mob/vore/alienanimals/succlet/proc/succlet_move(target)
 	if(!target)
 		return
 	if(isbelly(loc))	//No teleporting out of bellies
@@ -148,7 +152,7 @@
 		if(l.devourable && l.allowmobvore && l.can_be_drop_prey)
 			target_turf = get_turf(l)
 		else
-			to_chat(src, "<span class='warning'>You can't move on to [l], they are watching...</span>")
+			to_chat(src, span_warning("You can't move on to [l], they are watching..."))
 			return
 	else if(isturf(target))
 		target_turf = target
@@ -161,7 +165,7 @@
 			if(ismob(A))
 				continue
 			else if(A.density && !(A.flags & ON_BORDER))
-				to_chat(src, "<span class='warning'>You can't move there...</span>")
+				to_chat(src, span_warning("You can't move there..."))
 				return
 	else
 		return
@@ -170,47 +174,45 @@
 	for(var/atom/M in view(world.view, my_turf))	//Is anyone who is not us or our target around where we are?
 		if(isliving(M) && M != src && M != target && !istype(M, /mob/observer) && !M.invisibility && !istype(M,/mob/living/simple_mob/vore/alienanimals/succlet))
 			var/mob/living/check = M
-			if(check.stat)
-				to_chat(src, "<span class='warning'>You can't move, [check] is watching...</span>")
+			if(check.stat == CONSCIOUS)
+				to_chat(src, span_warning("You can't move, [check] is watching..."))
 				return
 			else if (!check.eye_blind)
-				to_chat(src, "<span class='warning'>You can't move, [check] is watching...</span>")
+				to_chat(src, span_warning("You can't move, [check] is watching..."))
 				return
 	for(var/atom/T in view(world.view, target_turf))	//Is anyone at our target?
 		if(isliving(T) && T != src && T != target && !istype(T, /mob/observer) && !T.invisibility && !istype(T,/mob/living/simple_mob/vore/alienanimals/succlet))
 			var/mob/living/check = T
-			if(check.stat)
-				to_chat(src, "<span class='warning'>You can't move, [check] is watching...</span>")
+			if(check.stat == CONSCIOUS)
+				to_chat(src, span_warning("You can't move, [check] is watching..."))
 				return
 			else if (!check.eye_blind)
-				to_chat(src, "<span class='warning'>You can't move, [check] is watching...</span>")
+				to_chat(src, span_warning("You can't move, [check] is watching..."))
 				return
 	forceMove(target_turf)
 	if(l)
 		l.Weaken(succlet_weaken_rate)
-		animal_nom(l)
-		l.stop_pulling()
+		if(client || prob(succlet_eat_chance))
+			animal_nom(l)
+			l.stop_pulling()
 
 
 /mob/living/simple_mob/vore/alienanimals/succlet/big
 	desc = "A big soft, fuzzy, innocent looking star shaped creature."
 	icon_state = "big_succlet"
 	icon_living = "big_succlet"
-	icon_dead = "big_succlet"
 	icon_rest = "big_succlet"
 	succlet_weaken_rate = 30	//Big
 
 /mob/living/simple_mob/vore/alienanimals/succlet/dark
 	icon_state = "dark_succlet"
 	icon_living = "dark_succlet"
-	icon_dead = "dark_succlet"
 	icon_rest = "dark_succlet"
 
 /mob/living/simple_mob/vore/alienanimals/succlet/poison
 	desc = "A soft, fuzzy, innocent looking star shaped creature. It looks like it could be poisonous."
 	icon_state = "poison_succlet"
 	icon_living = "poison_succlet"
-	icon_dead = "poison_succlet"
 	icon_rest = "poison_succlet"
 
 /mob/living/simple_mob/vore/alienanimals/succlet/poison/attack_hand(mob/user)
@@ -218,7 +220,7 @@
 	if(user.a_intent != I_HELP)
 		if(isliving(user))
 			var/mob/living/l = user
-			to_chat(l, "<span class='warning'>You feel \the [src]'s sting!!!</span>")
+			to_chat(l, span_warning("You feel \the [src]'s sting!!!"))
 			l.hallucination += 25
 			l.adjustHalLoss(200)
 			l.adjustToxLoss(10)
@@ -226,7 +228,6 @@
 /mob/living/simple_mob/vore/alienanimals/succlet/moss
 	icon_state = "moss_succlet"
 	icon_living = "moss_succlet"
-	icon_dead = "moss_succlet"
 	icon_rest = "moss_succlet"
 	vore_taste = "moss"
 	vore_smell = "moss"
@@ -235,8 +236,10 @@
 	desc = "A big soft, fuzzy, innocent looking star shaped creature. It looks regal with its crown!"
 	icon_state = "king_succlet"
 	icon_living = "king_succlet"
-	icon_dead = "king_succlet"
 	icon_rest = "king_succlet"
 	succlet_weaken_rate = 60	//The weight of authority is heavy!
 	vore_taste = "the king of snacks from a distant unseen universe"
 	vore_smell = "the king of snacks from a distant unseen universe"
+
+	maxHealth = 10000
+	health = 10000

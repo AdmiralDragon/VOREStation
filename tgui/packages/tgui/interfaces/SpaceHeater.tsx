@@ -1,8 +1,14 @@
-import { T0C } from '../constants';
-import { useBackend } from '../backend';
-import { Button, Knob, Section, LabeledControls, LabeledList } from '../components';
-import { Window } from '../layouts';
-import { BooleanLike } from 'common/react';
+import { useBackend } from 'tgui/backend';
+import { T0C } from 'tgui/constants';
+import { Window } from 'tgui/layouts';
+import {
+  Button,
+  Knob,
+  LabeledControls,
+  LabeledList,
+  Section,
+} from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 type Data = {
   temp: number;
@@ -12,18 +18,18 @@ type Data = {
   power: BooleanLike;
 };
 
-export const SpaceHeater = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const SpaceHeater = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { temp, minTemp, maxTemp, cell, power } = data;
 
   return (
-    <Window width={300} height={250} resizable>
+    <Window width={300} height={250}>
       <Window.Content>
         <Section title="Status">
           <LabeledList>
             <LabeledList.Item label="Target Temperature">
-              {temp} K ({temp - T0C}&deg; C)
+              {temp.toFixed(2)} K ({(temp - T0C).toFixed(2)}&deg; C)
             </LabeledList.Item>
             <LabeledList.Item label="Current Charge">
               {power}% {!cell && '(No Cell Inserted)'}
@@ -35,6 +41,7 @@ export const SpaceHeater = (props, context) => {
             <LabeledControls.Item label="Thermostat">
               <Knob
                 animated
+                format={(value) => value.toFixed(2)}
                 value={temp - T0C}
                 minValue={minTemp - T0C}
                 maxValue={maxTemp - T0C}
@@ -44,9 +51,13 @@ export const SpaceHeater = (props, context) => {
             </LabeledControls.Item>
             <LabeledControls.Item label="Cell">
               {cell ? (
-                <Button icon="eject" content="Eject Cell" onClick={() => act('cellremove')} />
+                <Button icon="eject" onClick={() => act('cellremove')}>
+                  Eject Cell
+                </Button>
               ) : (
-                <Button icon="car-battery" content="Insert Cell" onClick={() => act('cellinstall')} />
+                <Button icon="car-battery" onClick={() => act('cellinstall')}>
+                  Insert Cell
+                </Button>
               )}
             </LabeledControls.Item>
           </LabeledControls>

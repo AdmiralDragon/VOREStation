@@ -7,6 +7,7 @@
 	icon_base = "solid"
 	icon_reinf = "reinf_over"
 	icon_colour = "#666666"
+	supply_conversion_value = 0.15
 
 /datum/material/steel/generate_recipes()
 	..()
@@ -76,10 +77,65 @@
 		new /datum/stack_recipe("table frame", /obj/structure/table, 1, time = 10, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
 		new /datum/stack_recipe("bench frame", /obj/structure/table/bench, 1, time = 10, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
 		new /datum/stack_recipe("rack", /obj/structure/table/rack, 1, time = 5, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
+		new /datum/stack_recipe("steel shelves", /obj/structure/table/rack/shelf/steel, 1, one_per_turf = TRUE, time = 5, on_floor = TRUE, recycle_material = "[name]"),
 		new /datum/stack_recipe("closet", /obj/structure/closet, 2, time = 15, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
 		new /datum/stack_recipe("canister", /obj/machinery/portable_atmospherics/canister, 10, time = 15, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
-		new /datum/stack_recipe("cannon frame", /obj/item/weapon/cannonframe, 10, time = 15, one_per_turf = 0, on_floor = 0, recycle_material = "[name]"),
-		new /datum/stack_recipe("regular floor tile", /obj/item/stack/tile/floor, 1, 4, 20, recycle_material = "[name]"),
+		new /datum/stack_recipe("cannon frame", /obj/item/cannonframe, 10, time = 15, one_per_turf = 0, on_floor = 0, recycle_material = "[name]"),
+		new /datum/stack_recipe("maintenance panel", /obj/item/stack/tile/maintenance_panel, 4, 1, 20, recycle_material = "[name]"),
+		new /datum/stack_recipe_list("floor tiles", list(
+			new /datum/stack_recipe("regular floor tile", /obj/item/stack/tile/floor, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("steel hi-grip tile", /obj/item/stack/tile/floor/steelgrip, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("techfloor tile", /obj/item/stack/tile/floor/techgrey, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("techfloor grid tile", /obj/item/stack/tile/floor/techgrid, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("techmaint floor tile", /obj/item/stack/tile/floor/techmaint, 1, 4, 20, recycle_material = "[name]"),
+			)),
+			//Eris Floor tiles- Normal
+		new /datum/stack_recipe_list("eris floors-normal", list(
+			new /datum/stack_recipe("floor tile", /obj/item/stack/tile/floor/eris/steel, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("panel tile", /obj/item/stack/tile/floor/eris/steel/panels, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("techfloor tile", /obj/item/stack/tile/floor/eris/steel/techfloor, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("techfloor tile with vents", /obj/item/stack/tile/floor/eris/steel/techfloor_grid, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("brown perforated tile", /obj/item/stack/tile/floor/eris/steel/brown_perforated, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("gray perforated tile", /obj/item/stack/tile/floor/eris/steel/gray_perforated, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("cargo tile", /obj/item/stack/tile/floor/eris/steel/cargo, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("brown platform tile", /obj/item/stack/tile/floor/eris/steel/brown_platform, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("gray platform tile", /obj/item/stack/tile/floor/eris/steel/gray_platform, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("danger tile", /obj/item/stack/tile/floor/eris/steel/danger, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("golden tile", /obj/item/stack/tile/floor/eris/steel/golden, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("monofloor tile", /obj/item/stack/tile/floor/eris/steel/monofloor, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("bar flat tile", /obj/item/stack/tile/floor/eris/steel/bar_flat, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("bar dance tile", /obj/item/stack/tile/floor/eris/steel/bar_dance, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("bar light tile", /obj/item/stack/tile/floor/eris/steel/bar_light, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe_list("corner tiles", list(
+				new /datum/stack_recipe("blue corner tile", /obj/item/stack/tile/floor/eris/steel/bluecorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("orange corner tile", /obj/item/stack/tile/floor/eris/steel/orangecorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("cyan corner tile", /obj/item/stack/tile/floor/eris/steel/cyancorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("violet corner tile", /obj/item/stack/tile/floor/eris/steel/violetcorener, 1, 4, 20, recycle_material = "[name]"),
+			)),
+
+		)),
+			//Eris Floor tiles- Dark
+		new /datum/stack_recipe_list("eris floors-dark", list(
+			new /datum/stack_recipe("dark floor tile", /obj/item/stack/tile/floor/eris/dark, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark panel tile", /obj/item/stack/tile/floor/eris/dark/panels, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark techfloor tile", /obj/item/stack/tile/floor/eris/dark/techfloor, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark techfloor tile with vents", /obj/item/stack/tile/floor/eris/dark/techfloor_grid, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark brown perforated tile", /obj/item/stack/tile/floor/eris/dark/brown_perforated, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark gray perforated tile", /obj/item/stack/tile/floor/eris/dark/gray_perforated, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark cargo tile", /obj/item/stack/tile/floor/eris/dark/cargo, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark brown platform tile", /obj/item/stack/tile/floor/eris/dark/brown_platform, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark gray platform tile", /obj/item/stack/tile/floor/eris/dark/gray_platform, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark danger tile", /obj/item/stack/tile/floor/eris/dark/danger, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark golden tile", /obj/item/stack/tile/floor/eris/dark/golden, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe("dark monofloor tile", /obj/item/stack/tile/floor/eris/dark/monofloor, 1, 4, 20, recycle_material = "[name]"),
+			new /datum/stack_recipe_list("dark corner tiles", list(
+				new /datum/stack_recipe("dark blue corner tile", /obj/item/stack/tile/floor/eris/dark/bluecorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("dark orange corner tile", /obj/item/stack/tile/floor/eris/dark/orangecorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("dark cyan corner tile", /obj/item/stack/tile/floor/eris/dark/cyancorner, 1, 4, 20, recycle_material = "[name]"),
+				new /datum/stack_recipe("dark violet corner tile", /obj/item/stack/tile/floor/eris/dark/violetcorener, 1, 4, 20, recycle_material = "[name]"),
+			)),
+		)),
+
 		new /datum/stack_recipe("roofing tile", /obj/item/stack/tile/roofing, 3, 4, 20, recycle_material = "[name]"),
 		new /datum/stack_recipe("metal rod", /obj/item/stack/rods, 1, 2, 60, recycle_material = "[name]"),
 		new /datum/stack_recipe("frame parts", /obj/item/frame, 5, time = 25, on_floor = 1, recycle_material = "[name]"),
@@ -90,13 +146,16 @@
 		//new /datum/stack_recipe("IV drip", /obj/machinery/iv_drip, 4, time = 20, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"), //VOREStation Removal
 		new /datum/stack_recipe("medical stand", /obj/structure/medical_stand, 4, time = 20, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"), //VOREStation Replacement,
 		new /datum/stack_recipe("conveyor switch", /obj/machinery/conveyor_switch, 2, time = 20, one_per_turf = 1, on_floor = 1, recycle_material = "[name]"),
-		new /datum/stack_recipe("grenade casing", /obj/item/weapon/grenade/chem_grenade, recycle_material = "[name]"),
+		new /datum/stack_recipe("grenade casing", /obj/item/grenade/chem_grenade, recycle_material = "[name]"),
 		new /datum/stack_recipe("light fixture frame", /obj/item/frame/light, 2, recycle_material = "[name]"),
 		new /datum/stack_recipe("floor light fixture frame", /obj/machinery/light_construct/floortube, 2, recycle_material = "[name]"),
 		new /datum/stack_recipe("small light fixture frame", /obj/item/frame/light/small, 1, recycle_material = "[name]"),
 		new /datum/stack_recipe("floor lamp fixture frame", /obj/machinery/light_construct/flamp, 2, recycle_material = "[name]"),
 		new /datum/stack_recipe("big floor lamp fixture frame", /obj/machinery/light_construct/bigfloorlamp, 3, recycle_material = "[name]"),
 		new /datum/stack_recipe("apc frame", /obj/item/frame/apc, 2, recycle_material = "[name]"),
-		new /datum/stack_recipe("desk bell", /obj/item/weapon/deskbell, 1, on_floor = 1, supplied_material = "[name]"),
-		new /datum/stack_recipe("tanning rack", /obj/structure/tanning_rack, 3, one_per_turf = TRUE, time = 20, on_floor = TRUE, supplied_material = "[name]")
+		new /datum/stack_recipe("desk bell", /obj/item/deskbell, 1, on_floor = 1, supplied_material = "[name]"),
+		new /datum/stack_recipe("steel kettle", /obj/item/reagent_containers/glass/kettle, 1, on_floor = 1, supplied_material = "[name]"),
+		new /datum/stack_recipe("bunsen burner", /obj/machinery/bunsen_burner, 1, time = 25, on_floor = 1, supplied_material = "[name]"),
+		new /datum/stack_recipe("tanning rack", /obj/structure/tanning_rack, 3, one_per_turf = TRUE, time = 20, on_floor = TRUE, supplied_material = "[name]"),
+		new /datum/stack_recipe("steel hull sheet", /obj/item/stack/material/steel/hull, 2, 1, 5, time = 20, one_per_turf = 0, on_floor = 1, recycle_material = "[name]")
 	)

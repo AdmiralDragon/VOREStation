@@ -4,13 +4,13 @@
 	icon_state = "brown"
 	permeability_coefficient = 0.05
 	item_flags = NOSLIP
-	origin_tech = list(TECH_ILLEGAL = 3)
 	var/list/clothing_choices = list()
 	siemens_coefficient = 0.8
 	species_restricted = null
 	step_volume_mod = 0.5
 	drop_sound = 'sound/items/drop/rubber.ogg'
 	pickup_sound = 'sound/items/pickup/rubber.ogg'
+	resistance_flags = FIRE_PROOF | ACID_PROOF
 
 /obj/item/clothing/shoes/mime
 	name = "mime shoes"
@@ -28,6 +28,7 @@
 	species_restricted = null
 	drop_sound = 'sound/items/drop/rubber.ogg'
 	pickup_sound = 'sound/items/pickup/rubber.ogg'
+	resistance_flags = ACID_PROOF
 
 /obj/item/clothing/shoes/dress
 	name = "dress shoes"
@@ -47,6 +48,11 @@
 	body_parts_covered = 0
 
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/sandals
+	desc = "A pair of simple sandals."
+	name = "sandals"
+	icon_state = "sandals_recolor"
 
 /obj/item/clothing/shoes/flipflop
 	name = "flip flops"
@@ -95,7 +101,7 @@
 	var/footstep = 1	//used for squeeks whilst walking
 	species_restricted = null
 
-/obj/item/clothing/shoes/clown_shoes/handle_movement(var/turf/walking, var/running)
+/obj/item/clothing/shoes/clown_shoes/handle_movement(turf/walking, running)
 	if(running)
 		if(footstep >= 2)
 			footstep = 0
@@ -113,9 +119,7 @@
 	force = 2
 	siemens_coefficient = 0.7
 
-	cold_protection = FEET
 	min_cold_protection_temperature = SHOE_MIN_COLD_PROTECTION_TEMPERATURE
-	heat_protection = FEET
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = null
 
@@ -144,7 +148,7 @@
 	item_state_slots = list(slot_r_hand_str = "slippers", slot_l_hand_str = "slippers")
 
 /obj/item/clothing/shoes/laceup
-	name = "black oxford  shoes"
+	name = "black oxford shoes"
 	icon_state = "oxford_black"
 
 /obj/item/clothing/shoes/laceup/grey
@@ -189,6 +193,7 @@
 	desc = "A roll of treated canvas used for wrapping claws or paws"
 	icon_state = "clothwrap"
 	item_state = "clothwrap"
+	blocks_footsteps = FALSE
 	force = 0
 	w_class = ITEMSIZE_SMALL
 	species_restricted = null
@@ -199,11 +204,11 @@
 	var/bootcolor = "white"
 	name = "ranger boots"
 	desc = "The Rangers special lightweight hybrid magboots-jetboots perfect for EVA. If only these functions were so easy to copy in reality.\
-	 These ones are just a well-made pair of boots in appropriate colours."
+		These ones are just a well-made pair of boots in appropriate colours."
 	icon = 'icons/obj/clothing/ranger.dmi'
 	icon_state = "ranger_boots"
 
-/obj/item/clothing/shoes/boots/ranger/Initialize()
+/obj/item/clothing/shoes/boots/ranger/Initialize(mapload)
 	. = ..()
 	if(icon_state == "ranger_boots")
 		name = "[bootcolor] ranger boots"
@@ -248,3 +253,9 @@
 	desc = "A stylish, expensive pair of red sneakers."
 	icon_state = "sneakersred"
 	item_state = "sneakersred"
+
+/obj/item/clothing/shoes/ballet
+	name = "pointe shoes"
+	desc = "These shoes feature long lace straps and flattened off toes. Great for the most elegant of dances!"
+	icon_state = "ballet"
+	item_state = "ballet"

@@ -1,10 +1,10 @@
-import { useBackend } from '../backend';
-import { Window } from '../layouts';
-import { Button, Section, Table, Knob } from '../components';
-import { BooleanLike } from 'common/react';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Button, Knob, Section, Table } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 export const GyrotronControl = () => (
-  <Window width={627} height={700} resizable>
+  <Window width={627} height={700}>
     <Window.Content>
       <GyrotronControlContent />
     </Window.Content>
@@ -12,25 +12,42 @@ export const GyrotronControl = () => (
 );
 
 type Data = {
-  gyros: { name: string; x; y; z; active: BooleanLike; deployed: BooleanLike; ref: string; fire_delay; strength }[];
+  gyros: {
+    name: string;
+    x: number;
+    y: number;
+    z: number;
+    active: BooleanLike;
+    deployed: BooleanLike;
+    ref: string;
+    fire_delay: number;
+    strength: number;
+  }[];
 };
 
-export const GyrotronControlContent = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const GyrotronControlContent = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { gyros } = data;
 
   return (
     <Section
+      fill
+      scrollable
       title="Gyrotrons"
-      buttons={<Button icon="pencil-alt" content={'Set Tag'} onClick={() => act('set_tag')} />}>
+      buttons={
+        <Button icon="pencil-alt" onClick={() => act('set_tag')}>
+          Set Tag
+        </Button>
+      }
+    >
       <Table>
         <Table.Row header>
           <Table.Cell>Name</Table.Cell>
           <Table.Cell>Position</Table.Cell>
           <Table.Cell>Status</Table.Cell>
-          <Table.Cell>Fire Delay</Table.Cell>
-          <Table.Cell>Strength</Table.Cell>
+          <Table.Cell style={{ textAlign: 'center' }}>Fire Delay</Table.Cell>
+          <Table.Cell style={{ textAlign: 'center' }}>Strength</Table.Cell>
         </Table.Row>
         {gyros.map((gyro) => (
           <Table.Row key={gyro.name}>
@@ -41,7 +58,6 @@ export const GyrotronControlContent = (props, context) => {
             <Table.Cell>
               <Button
                 icon="power-off"
-                content={gyro.active ? 'Online' : 'Offline'}
                 selected={gyro.active}
                 disabled={!gyro.deployed}
                 onClick={() =>
@@ -49,11 +65,14 @@ export const GyrotronControlContent = (props, context) => {
                     gyro: gyro.ref,
                   })
                 }
-              />
+              >
+                {gyro.active ? 'Online' : 'Offline'}
+              </Button>
             </Table.Cell>
             <Table.Cell>
               <Knob
-                forcedInputWidth="60px"
+                tickWhileDragging
+                format={(value) => value.toFixed()}
                 size={1.25}
                 color={!!gyro.active && 'yellow'}
                 value={gyro.fire_delay}
@@ -61,7 +80,7 @@ export const GyrotronControlContent = (props, context) => {
                 minValue={1}
                 maxValue={60}
                 stepPixelSize={1}
-                onDrag={(e, value) =>
+                onChange={(e, value) =>
                   act('set_rate', {
                     gyro: gyro.ref,
                     rate: value,
@@ -71,7 +90,8 @@ export const GyrotronControlContent = (props, context) => {
             </Table.Cell>
             <Table.Cell>
               <Knob
-                forcedInputWidth="60px"
+                tickWhileDragging
+                format={(value) => value.toFixed()}
                 size={1.25}
                 color={!!gyro.active && 'yellow'}
                 value={gyro.strength}
@@ -79,7 +99,7 @@ export const GyrotronControlContent = (props, context) => {
                 minValue={1}
                 maxValue={50}
                 stepPixelSize={1}
-                onDrag={(e, value) =>
+                onChange={(e, value) =>
                   act('set_str', {
                     gyro: gyro.ref,
                     str: value,

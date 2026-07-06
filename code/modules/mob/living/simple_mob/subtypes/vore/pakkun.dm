@@ -6,7 +6,8 @@
 	or even borne out of hunger, but more of a form of playfighting among packmates. Some colonies are known to keep domesticated specimens as a form of pest control \
 	despite the occasional accidents that can occur as a result of staff becoming overly friendly and triggering their playfighting instincts. \
 	More mature specimens are identifiable by a greener tint to their skin, and eventually the development of frills \
-	around their neck and along the backs of their heads."
+	around their neck and along the backs of their heads. Other regional subspecies are known to exist, some with a more aggressive temperament than others. \
+	While they can be mildly hazardous to the unprepared explorer, they are primarily ambush predators and will rarely attack if you maintain eye contact."
 	value = CATALOGUER_REWARD_TRIVIAL
 
 /mob/living/simple_mob/vore/pakkun
@@ -23,13 +24,13 @@
 	icon_rest = "pakkun-rest"
 	icon = 'icons/mob/vore.dmi'
 
-	faction = "pakkun"
+	faction = FACTION_PAKKUN
 
-	movement_cooldown = 6
+	movement_cooldown = 2
 	can_be_drop_pred = 1 //They can tongue vore.
 
 	meat_amount = 5
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+	meat_type = /obj/item/reagent_containers/food/snacks/meat
 
 	vore_active = 1
 	vore_icons = SA_ICON_LIVING
@@ -49,10 +50,15 @@
 	ai_holder_type = /datum/ai_holder/simple_mob/ranged/pakkun
 	vore_default_mode = DM_SELECT
 
-	var/extra_posessive = FALSE					// Enable if you want their tummy hugs to be inescapable
+	var/extra_possessive = FALSE					// Enable if you want their tummy hugs to be inescapable
 	var/autorest_cooldown = 100
 
 	nom_mob = TRUE
+
+	maxHealth = 100
+	health = 100
+
+	allow_mind_transfer = TRUE
 
 /mob/living/simple_mob/vore/pakkun/Life()
 	. = ..()
@@ -75,11 +81,13 @@
 		return
 
 	if(resting)
-		vore_selected.digest_mode = DM_UNABSORB
+		if(isbelly(vore_selected))
+			vore_selected.digest_mode = DM_UNABSORB
 		ai_holder.go_sleep()
 
 	else
-		vore_selected.digest_mode = vore_default_mode
+		if(isbelly(vore_selected))
+			vore_selected.digest_mode = vore_default_mode
 		ai_holder.go_wake()
 
 /mob/living/simple_mob/vore/pakkun/attack_hand(mob/user)
@@ -89,7 +97,7 @@
 		return ..()
 	if(resting)
 		playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		user.visible_message("<span class='notice'>\The [user] shakes \the [src] awake.</span>","<span class='notice'>You shake \the [src] awake!</span>")
+		user.visible_message(span_notice("\The [user] shakes \the [src] awake."),span_notice("You shake \the [src] awake!"))
 		lay_down()
 		return
 	else
@@ -106,36 +114,42 @@
 			our_targets -= list_target
 			continue
 		var/mob/living/L = list_target
-		if(!(L.can_be_drop_prey && L.throw_vore && L.allowmobvore))
+		if(!(L.can_be_drop_prey && L.throw_vore && L.allowmobvore && !L.buckled))
 			our_targets -= list_target
 			continue
-	if(istype(holder, /mob/living/simple_mob))
+		if((L.dir == 1 && holder.y >= L.y) || (L.dir == 2 && holder.y <= L.y) || (L.dir == 4 && holder.x >= L.x) || (L.dir == 8 && holder.x <= L.x)) //eliminate targets facing the pakkun's direction
+			our_targets -= list_target
+			continue
+		if(abs(holder.x - L.x)>6 || abs(holder.y - L.y)>6) //finally, pakkuns on the very very edge of the screen won't target you
+			our_targets -= list_target
+			continue
+	if(isanimal(holder))
 		var/mob/living/simple_mob/SM = holder
 		our_targets -= SM.prey_excludes // Lazylist, but subtracting a null from the list seems fine.
 	return our_targets
 
-/datum/ai_holder/simple_mob/ranged/pakkun/can_attack(atom/movable/the_target, var/vision_required = TRUE)
+/datum/ai_holder/simple_mob/ranged/pakkun/can_attack(atom/movable/the_target, vision_required = TRUE)
 	.=..()
 	if(isliving(the_target))
 		var/mob/living/L = the_target
 		if(!(L.can_be_drop_prey && L.throw_vore && L.allowmobvore))
 			return FALSE
-		if(istype(holder, /mob/living/simple_mob))
+		if(isanimal(holder))
 			var/mob/living/simple_mob/SM = holder
 			if(LAZYFIND(SM.prey_excludes, L))
 				return FALSE
 	else
 		return FALSE
 
-/mob/living/simple_mob/vore/pakkun/on_throw_vore_special(var/pred, var/mob/living/target)
-	if(pred && !extra_posessive && !(LAZYFIND(prey_excludes, target)))
+/mob/living/simple_mob/vore/pakkun/on_throw_vore_special(pred, mob/living/target)
+	if(pred && !extra_possessive && !(LAZYFIND(prey_excludes, target)))
 		LAZYSET(prey_excludes, target, world.time)
-		addtimer(CALLBACK(src, .proc/removeMobFromPreyExcludes, weakref(target)), 5 MINUTES)
+		addtimer(CALLBACK(src, PROC_REF(removeMobFromPreyExcludes), WEAKREF(target)), 5 MINUTES)
 	if(ai_holder)
 		ai_holder.remove_target()
 
-/mob/living/simple_mob/vore/pakkun/init_vore()
-	..()
+/mob/living/simple_mob/vore/pakkun/load_default_bellies()
+	. = ..()
 	var/obj/belly/B = vore_selected
 	B.name = "stomach"
 	B.desc = "you land with a soft bump in what can only be described as a big soft slimy sack, the walls effortlessly stretching to match your every move with no sign of reaching any kind of elastic \
@@ -148,18 +162,18 @@
 	B.digestchance = 0
 	B.digest_mode = DM_SELECT
 
-/mob/living/simple_mob/vore/pakkun/attackby(var/obj/item/O, var/mob/user) //if they're newspapered, they'll spit out any junk they've eaten for whatever reason
-    if(istype(O, /obj/item/weapon/newspaper) && !ckey && isturf(user.loc))
-        user.visible_message("<span class='info'>[user] swats [src] with [O]!</span>")
-        release_vore_contents()
-        for(var/mob/living/L in living_mobs(0))
-            if(!(LAZYFIND(prey_excludes, L)))
-                LAZYSET(prey_excludes, L, world.time)
-                addtimer(CALLBACK(src, .proc/removeMobFromPreyExcludes, weakref(L)), 5 MINUTES)
-    else
-        ..()
+/mob/living/simple_mob/vore/pakkun/attackby(obj/item/O, mob/user) //if they're newspapered, they'll spit out any junk they've eaten for whatever reason
+	if(istype(O, /obj/item/newspaper) && !ckey && isturf(user.loc))
+		user.visible_message(span_info("[user] swats [src] with [O]!"))
+		release_vore_contents()
+		for(var/mob/living/L in living_mobs(0))
+			if(!(LAZYFIND(prey_excludes, L)))
+				LAZYSET(prey_excludes, L, world.time)
+				addtimer(CALLBACK(src, PROC_REF(removeMobFromPreyExcludes), WEAKREF(L)), 5 MINUTES)
+	else
+		..()
 
-//a palette-swapped version that's a bit tougher and bossier, in JRPG tradition
+//a palette-swapped version that's a bit bossier, in JRPG tradition
 
 /mob/living/simple_mob/vore/pakkun/snapdragon
 	name = "snapdragon"
@@ -169,13 +183,51 @@
 	icon_state = "snapdragon"
 	icon_rest = "snapdragon-rest"
 
-	extra_posessive = TRUE //you're gonna get KEPT, at least the first time you go in
-	maxHealth = 100
-	health = 100
+	extra_possessive = TRUE //you're gonna get KEPT, at least the first time you go in
 
-/mob/living/simple_mob/vore/pakkun/snapdragon/on_throw_vore_special(var/pred, var/mob/living/target)
+/mob/living/simple_mob/vore/pakkun/snapdragon/on_throw_vore_special(pred, mob/living/target)
 	..()
-	extra_posessive = !extra_posessive //toggle their possessiveness on and off every time they eat someone
+	extra_possessive = !extra_possessive //toggle their possessiveness on and off every time they eat someone
+
+//an even greedier pallete-swap
+
+/mob/living/simple_mob/vore/pakkun/sand
+	name = "sand pakkun"
+	desc = "A small, yellow, bipedal reptile. Its head and jaws are rather large in proportion to its body."
+	icon_dead = "pakkunyellow-dead"
+	icon_living = "pakkunyellow"
+	icon_state = "pakkunyellow"
+	icon_rest = "pakkunyellow-rest"
+
+	extra_possessive = TRUE // won't let its prey go if it's awake, luckily, see below.
+
+/mob/living/simple_mob/vore/pakkun/sand/on_throw_vore_special(pred, mob/living/target)
+	..()
+	autorest_cooldown = 0 // Sand pakkuns, also known as napdragons, like to curl up for an small sleemp after eating. This is your chance to escape.
+
+//use this one sparingly because it is absolutely turbolethal to anyone who has digestion turned on.
+
+/mob/living/simple_mob/vore/pakkun/fire
+	name = "fire pakkun"
+	desc = "A small, red, bipedal reptile. Its head and jaws are rather large in proportion to its body."
+	icon_dead = "pakkunred-dead"
+	icon_living = "pakkunred"
+	icon_state = "pakkunred"
+	icon_rest = "pakkunred-rest"
+
+	extra_possessive = TRUE // yeah this one just... doesn't. It doesn't even have any fancy behaviours. Hope it gets tired or you get saved.
+
+// this one's like a standard blue pakkun in terms of eating behaviour, but wanders a lot more quickly
+
+/mob/living/simple_mob/vore/pakkun/purple
+	name = "amethyst pakkun"
+	desc = "A small, purple, bipedal reptile. Its head and jaws are rather large in proportion to its body."
+	icon_dead = "pakkunpurp-dead"
+	icon_living = "pakkunpurp"
+	icon_state = "pakkunpurp"
+	icon_rest = "pakkunpurp-rest"
+
+	movement_cooldown = -2
 
 // (mostly) friendly pet version
 
@@ -203,7 +255,7 @@
 			our_targets -= list_target
 	return our_targets
 
-/datum/ai_holder/simple_mob/ranged/pakkun/snappy/can_attack(atom/movable/the_target, var/vision_required = TRUE)
+/datum/ai_holder/simple_mob/ranged/pakkun/snappy/can_attack(atom/movable/the_target, vision_required = TRUE)
 	.=..()
 	var/mob/living/simple_mob/vore/pakkun/snapdragon/snappy/SM = holder
 	if(!(the_target in SM.petters))
@@ -211,7 +263,7 @@
 
 /mob/living/simple_mob/vore/pakkun/snapdragon/snappy/attack_hand(mob/living/carbon/human/M as mob)
 	if(M.a_intent == I_HELP && !(M in petters))
-		to_chat(M, "<span class='notice'>\The [src] gets a mischievous glint in her eye!!</span>")
+		to_chat(M, span_notice("\The [src] gets a mischievous glint in her eye!!"))
 		petters += M //YOU HAVE OFFERED YOURSELF TO THE LIZARD
 	return ..()
 
@@ -220,8 +272,8 @@
 		petters -= pick(petters)
 	..()
 
-/mob/living/simple_mob/vore/pakkun/snapdragon/snappy/init_vore()
-	..()
+/mob/living/simple_mob/vore/pakkun/snapdragon/snappy/load_default_bellies()
+	. = ..()
 	var/obj/belly/B = vore_selected
 	B.digest_mode = DM_HOLD
 	B.desc = "the lizard gently yet insistently stuffs you down her gullet - evidently enjoying this moment of playtime as you land in a sprawled heap in the stretchy, clinging sack that makes up \

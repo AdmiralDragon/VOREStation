@@ -1,17 +1,17 @@
-import { useBackend } from '../backend';
-import { Button, LabeledList, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Button, LabeledList, Section } from 'tgui-core/components';
 
 type Data = {
-  plasma;
-  oxygen;
+  phoron: number;
+  oxygen: number;
 };
 
-export const TankDispenser = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
-  const { plasma, oxygen } = data;
+export const TankDispenser = (props) => {
+  const { act, data } = useBackend<Data>();
+  const { phoron, oxygen } = data;
   return (
-    <Window width={275} height={103} resizable>
+    <Window width={275} height={103}>
       <Window.Content>
         <Section>
           <LabeledList>
@@ -19,24 +19,28 @@ export const TankDispenser = (props, context) => {
               label="Phoron"
               buttons={
                 <Button
-                  icon={plasma ? 'square' : 'square-o'}
-                  content="Dispense"
-                  disabled={!plasma}
-                  onClick={() => act('plasma')}
-                />
-              }>
-              {plasma}
+                  icon={phoron ? 'square' : 'square-o'}
+                  disabled={!phoron}
+                  onClick={() => act('phoron')}
+                >
+                  Dispense
+                </Button>
+              }
+            >
+              {phoron}
             </LabeledList.Item>
             <LabeledList.Item
               label="Oxygen"
               buttons={
                 <Button
                   icon={oxygen ? 'square' : 'square-o'}
-                  content="Dispense"
                   disabled={!oxygen}
                   onClick={() => act('oxygen')}
-                />
-              }>
+                >
+                  Dispense
+                </Button>
+              }
+            >
               {oxygen}
             </LabeledList.Item>
           </LabeledList>

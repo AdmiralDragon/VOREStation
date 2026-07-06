@@ -1,7 +1,7 @@
-import { useBackend } from '../backend';
-import { Window } from '../layouts';
-import { Box, Button, Section } from '../components';
-import { BooleanLike } from 'common/react';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Box, Button, Section } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 export const XenoarchArtifactAnalyzer = () => {
   return (
@@ -18,15 +18,18 @@ type Data = {
   scan_in_progress: BooleanLike;
 };
 
-const XenoarchArtifactAnalyzerContent = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+const XenoarchArtifactAnalyzerContent = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { owned_scanner, scan_in_progress } = data;
 
   if (!owned_scanner) {
     return (
       <Section title="No Scanner Detected">
-        <Box color="bad">Warning: No scanner was detected. This machine requires a scanner to operate.</Box>
+        <Box color="bad">
+          Warning: No scanner was detected. This machine requires a scanner to
+          operate.
+        </Box>
       </Section>
     );
   }

@@ -1,7 +1,7 @@
-import { BooleanLike } from 'common/react';
-import { useBackend } from '../backend';
-import { Button, LabeledList, NoticeBox, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Button, LabeledList, NoticeBox, Section } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 type Data = {
   tank_one: string;
@@ -10,8 +10,8 @@ type Data = {
   valve: BooleanLike;
 };
 
-export const TransferValve = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const TransferValve = (props) => {
+  const { act, data } = useBackend<Data>();
   const { tank_one, tank_two, attached_device, valve } = data;
   return (
     <Window>
@@ -21,10 +21,11 @@ export const TransferValve = (props, context) => {
             <LabeledList.Item label="Valve Status">
               <Button
                 icon={valve ? 'unlock' : 'lock'}
-                content={valve ? 'Open' : 'Closed'}
                 disabled={!tank_one || !tank_two}
                 onClick={() => act('toggle')}
-              />
+              >
+                {valve ? 'Open' : 'Closed'}
+              </Button>
             </LabeledList.Item>
           </LabeledList>
         </Section>
@@ -35,20 +36,23 @@ export const TransferValve = (props, context) => {
               textAlign="center"
               width="150px"
               icon="cog"
-              content="Configure Assembly"
               disabled={!attached_device}
               onClick={() => act('device')}
-            />
-          }>
+            >
+              Configure Assembly
+            </Button>
+          }
+        >
           <LabeledList>
             {attached_device ? (
               <LabeledList.Item label="Attachment">
                 <Button
                   icon="eject"
-                  content={attached_device}
                   disabled={!attached_device}
                   onClick={() => act('remove_device')}
-                />
+                >
+                  {attached_device}
+                </Button>
               </LabeledList.Item>
             ) : (
               <NoticeBox textAlign="center">Attach Assembly</NoticeBox>
@@ -59,7 +63,13 @@ export const TransferValve = (props, context) => {
           <LabeledList>
             {tank_one ? (
               <LabeledList.Item label="Attachment">
-                <Button icon="eject" content={tank_one} disabled={!tank_one} onClick={() => act('tankone')} />
+                <Button
+                  icon="eject"
+                  disabled={!tank_one}
+                  onClick={() => act('tankone')}
+                >
+                  {tank_one}
+                </Button>
               </LabeledList.Item>
             ) : (
               <NoticeBox textAlign="center">Attach Tank</NoticeBox>
@@ -70,7 +80,13 @@ export const TransferValve = (props, context) => {
           <LabeledList>
             {tank_two ? (
               <LabeledList.Item label="Attachment">
-                <Button icon="eject" content={tank_two} disabled={!tank_two} onClick={() => act('tanktwo')} />
+                <Button
+                  icon="eject"
+                  disabled={!tank_two}
+                  onClick={() => act('tanktwo')}
+                >
+                  {tank_two}
+                </Button>
               </LabeledList.Item>
             ) : (
               <NoticeBox textAlign="center">Attach Tank</NoticeBox>

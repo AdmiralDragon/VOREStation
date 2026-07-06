@@ -1,7 +1,7 @@
-import { BooleanLike } from 'common/react';
-import { useBackend } from '../backend';
-import { Button, Box, Flex, LabeledList, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Box, Button, LabeledList, Section, Stack } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 type Data = {
   on: BooleanLike;
@@ -11,13 +11,13 @@ type Data = {
   logs: string[];
 };
 
-export const ExonetNode = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const ExonetNode = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { on, allowPDAs, allowCommunicators, allowNewscasters, logs } = data;
 
   return (
-    <Window width={400} height={400} resizable>
+    <Window width={400} height={400}>
       <Window.Content scrollable>
         <Section
           title="Status"
@@ -25,46 +25,53 @@ export const ExonetNode = (props, context) => {
             <Button
               icon="power-off"
               selected={on}
-              content={'Power ' + (on ? 'On' : 'Off')}
               onClick={() => act('toggle_power')}
-            />
-          }>
+            >
+              {`Power ${on ? 'On' : 'Off'}`}
+            </Button>
+          }
+        >
           <LabeledList>
             <LabeledList.Item label="Incoming PDA Messages">
               <Button
                 icon="power-off"
                 selected={allowPDAs}
-                content={allowPDAs ? 'Open' : 'Closed'}
                 onClick={() => act('toggle_PDA_port')}
-              />
+              >
+                {allowPDAs ? 'Open' : 'Closed'}
+              </Button>
             </LabeledList.Item>
             <LabeledList.Item label="Incoming Communicators">
               <Button
                 icon="power-off"
                 selected={allowCommunicators}
-                content={allowCommunicators ? 'Open' : 'Closed'}
                 onClick={() => act('toggle_communicator_port')}
-              />
+              >
+                {allowCommunicators ? 'Open' : 'Closed'}
+              </Button>
             </LabeledList.Item>
             <LabeledList.Item label="Incoming Newscaster Content">
               <Button
                 icon="power-off"
                 selected={allowNewscasters}
-                content={allowNewscasters ? 'Open' : 'Closed'}
                 onClick={() => act('toggle_newscaster_port')}
-              />
+              >
+                {allowNewscasters ? 'Open' : 'Closed'}
+              </Button>
             </LabeledList.Item>
           </LabeledList>
         </Section>
         <Section title="Logging">
-          <Flex wrap="wrap">
+          <Stack wrap="wrap">
             {logs.map((log, i) => (
-              <Flex.Item m="2px" key={i} basis="49%" grow={i % 2}>
+              <Stack.Item m="2px" key={i} basis="49%" grow={i % 2}>
                 {log}
-              </Flex.Item>
+              </Stack.Item>
             ))}
-            {!logs || logs.length === 0 ? <Box color="average">No logs found.</Box> : null}
-          </Flex>
+            {!logs || logs.length === 0 ? (
+              <Box color="average">No logs found.</Box>
+            ) : null}
+          </Stack>
         </Section>
       </Window.Content>
     </Window>

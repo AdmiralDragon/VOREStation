@@ -1,4 +1,4 @@
-/obj/item/weapon/melee/energy/sword/imperial
+/obj/item/melee/energy/sword/imperial
 	name = "energy gladius"
 	desc = "A broad, short energy blade.  You'll be glad to have this in a fight."
 	icon_state = "impsword"
@@ -7,9 +7,9 @@
 	colorable = FALSE
 	lcolor = "#FFFFFF"
 
-/obj/item/weapon/melee/energy/sword/altevian
+/obj/item/melee/energy/sword/altevian
 	name = "plasma blade cutter"
-	desc = "A device used as both defense and operational purposes to cut through most metals. This is usually seen on engineers from the altevian hegemony when working salvaging derelicts."
+	desc = "A device that's primarily used to cut through hull plating and interior structure, but also doubles as a deadly weapon. It's normally seen in the hands of altevian engineers as they carry out salvage work."
 	icon_state = "altevian-cutter"
 	item_state = "altevian-cutter"
 	icon = 'icons/obj/weapons_vr.dmi'
@@ -17,7 +17,7 @@
 	colorable = FALSE
 	lcolor = "#FFFFFF"
 
-/obj/item/weapon/melee/energy/sword/altevian/update_icon()
+/obj/item/melee/energy/sword/altevian/update_icon()
 	..()
 	if(active)
 		icon_state = "[initial(icon_state)]_active"

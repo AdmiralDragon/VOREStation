@@ -1,8 +1,14 @@
-import { useBackend } from '../backend';
-import { Fragment } from 'inferno';
-import { Box, Button, LabeledList, Section, Table } from '../components';
-import { Window } from '../layouts';
-import { BooleanLike } from 'common/react';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import {
+  Box,
+  Button,
+  LabeledList,
+  Section,
+  Stack,
+  Table,
+} from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 const getStatusText = (port) => {
   if (port.input) {
@@ -32,36 +38,46 @@ type Data = {
   last_flow_rate: number;
 };
 
-export const OmniMixer = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const OmniMixer = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { power, config, ports, set_flow_rate, last_flow_rate } = data;
 
   return (
-    <Window width={390} height={330} resizable>
+    <Window width={390} height={330}>
       <Window.Content>
         <Section
           title={config ? 'Configuration' : 'Status'}
           buttons={
-            <Fragment>
-              <Button
-                icon="power-off"
-                content={power ? 'On' : 'Off'}
-                selected={power}
-                disabled={config}
-                onClick={() => act('power')}
-              />
-              <Button icon="wrench" selected={config} onClick={() => act('configure')} />
-            </Fragment>
-          }>
+            <Stack>
+              <Stack.Item>
+                <Button
+                  icon="power-off"
+                  selected={power}
+                  disabled={config}
+                  onClick={() => act('power')}
+                >
+                  {power ? 'On' : 'Off'}
+                </Button>
+              </Stack.Item>
+              <Stack.Item>
+                <Button
+                  icon="wrench"
+                  selected={config}
+                  onClick={() => act('configure')}
+                />
+              </Stack.Item>
+            </Stack>
+          }
+        >
           <Table>
             <Table.Row header>
               <Table.Cell textAlign="center">Port</Table.Cell>
               {config ? (
-                <Fragment>
+                <>
                   <Table.Cell textAlign="center">Input</Table.Cell>
                   <Table.Cell textAlign="center">Output</Table.Cell>
-                </Fragment>
+                </>
               ) : (
                 <Table.Cell textAlign="center">Mode</Table.Cell>
               )}
@@ -69,7 +85,9 @@ export const OmniMixer = (props, context) => {
               {config ? <Table.Cell textAlign="center">Lock</Table.Cell> : null}
             </Table.Row>
             {ports ? (
-              ports.map((port) => <PortRow key={port.dir} port={port} config={config} />)
+              ports.map((port) => (
+                <PortRow key={port.dir} port={port} config={config} />
+              ))
             ) : (
               <Box color="bad">No Ports Detected</Box>
             )}
@@ -77,12 +95,16 @@ export const OmniMixer = (props, context) => {
         </Section>
         <Section title="Flow Rate">
           <LabeledList>
-            <LabeledList.Item label="Current Flow Rate">{last_flow_rate} L/s</LabeledList.Item>
+            <LabeledList.Item label="Current Flow Rate">
+              {last_flow_rate} L/s
+            </LabeledList.Item>
             <LabeledList.Item label="Flow Rate Limit">
               {config ? (
-                <Button icon="wrench" content={set_flow_rate / 10 + ' L/s'} onClick={() => act('set_flow_rate')} />
+                <Button icon="wrench" onClick={() => act('set_flow_rate')}>
+                  {`${set_flow_rate} L/s`}
+                </Button>
               ) : (
-                set_flow_rate / 10 + ' L/s'
+                `${set_flow_rate} L/s`
               )}
             </LabeledList.Item>
           </LabeledList>
@@ -92,27 +114,28 @@ export const OmniMixer = (props, context) => {
   );
 };
 
-const PortRow = (props, context) => {
-  const { act } = useBackend(context);
+const PortRow = (props) => {
+  const { act } = useBackend();
   const { port, config } = props;
 
   return (
     <Table.Row>
-      <Table.Cell textAlign="center">{port.dir + ' Port'}</Table.Cell>
+      <Table.Cell textAlign="center">{`${port.dir} Port`}</Table.Cell>
       <Table.Cell textAlign="center">
         {config ? (
           <Button
-            content="IN"
             selected={port.input}
             disabled={port.output}
             icon="compress-arrows-alt"
             onClick={() =>
               act('switch_mode', {
-                'mode': port.input ? 'none' : 'in',
-                'dir': port.dir,
+                mode: port.input ? 'none' : 'in',
+                dir: port.dir,
               })
             }
-          />
+          >
+            IN
+          </Button>
         ) : (
           getStatusText(port)
         )}
@@ -120,49 +143,52 @@ const PortRow = (props, context) => {
       <Table.Cell textAlign="center">
         {config ? (
           <Button
-            content="OUT"
             selected={port.output}
             icon="expand-arrows-alt"
             onClick={() =>
               act('switch_mode', {
-                'mode': 'out',
-                'dir': port.dir,
+                mode: 'out',
+                dir: port.dir,
               })
             }
-          />
+          >
+            OUT
+          </Button>
         ) : (
-          port.concentration * 100 + '%'
+          `${port.concentration * 100}%`
         )}
       </Table.Cell>
       {config ? (
-        <Fragment>
+        <>
           <Table.Cell textAlign="center" width="20%">
             <Button
               width="100%"
               icon="wrench"
               disabled={!port.input}
-              content={!port.input ? '-' : port.concentration * 100 + ' %'}
               onClick={() =>
                 act('switch_con', {
-                  'dir': port.dir,
+                  dir: port.dir,
                 })
               }
-            />
+            >
+              {!port.input ? '-' : `${port.concentration * 100} %`}
+            </Button>
           </Table.Cell>
           <Table.Cell textAlign="center">
             <Button
               icon={port.con_lock ? 'lock' : 'lock-open'}
               disabled={!port.input}
               selected={port.con_lock}
-              content={port.f_type || 'None'}
               onClick={() =>
                 act('switch_conlock', {
-                  'dir': port.dir,
+                  dir: port.dir,
                 })
               }
-            />
+            >
+              {port.f_type || 'None'}
+            </Button>
           </Table.Cell>
-        </Fragment>
+        </>
       ) : null}
     </Table.Row>
   );

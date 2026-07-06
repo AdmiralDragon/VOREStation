@@ -5,14 +5,14 @@
 	icon_state = "fennec"
 	item_state = "fennec"
 
-	movement_cooldown = 0.5 SECONDS
+	movement_cooldown = -1
 
 	see_in_dark = 6
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"
 
-	holder_type = /obj/item/weapon/holder/fennec
+	holder_type = /obj/item/holder/fennec
 	mob_size = MOB_SMALL
 
 	has_langs = list(LANGUAGE_ANIMAL)
@@ -21,7 +21,7 @@
 	name = "faux"
 	desc = "Domesticated fennec. Seems to like screaming just as much though."
 
-/mob/living/simple_mob/animal/passive/fennec/Initialize()
+/mob/living/simple_mob/animal/passive/fennec/Initialize(mapload)
 	icon_living = "[initial(icon_state)]"
 	icon_dead = "[initial(icon_state)]_dead"
 	icon_rest = "[initial(icon_state)]_rest"

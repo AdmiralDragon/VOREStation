@@ -1,18 +1,23 @@
-var/world_time_season
+GLOBAL_VAR(world_time_season)
+GLOBAL_VAR(world_time_year)
+GLOBAL_VAR(world_time_month)
+GLOBAL_VAR(world_time_day)
 
 /proc/setup_season()
-	var/month = text2num(time2text(world.timeofday, "MM")) 	// get the current month
-	switch(month)
+	GLOB.world_time_month = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	switch(GLOB.world_time_month)
 		if(1 to 2)
-			world_time_season = "winter"
+			GLOB.world_time_season = "winter"
 		if(3 to 5)
-			world_time_season = "spring"
+			GLOB.world_time_season = "spring"
 		if(6 to 8)
-			world_time_season = "summer"
+			GLOB.world_time_season = "summer"
 		if(9 to 11)
-			world_time_season = "autumn"
+			GLOB.world_time_season = "autumn"
 		if(12)
-			world_time_season = "winter"
+			GLOB.world_time_season = "winter"
+	GLOB.world_time_day = text2num(time2text(world.timeofday, "DD"))
+	GLOB.world_time_year = text2num(time2text(world.timeofday, "YYYY"))
 
 /turf/simulated/floor/outdoors/grass/seasonal
 	name = "grass"
@@ -21,7 +26,7 @@ var/world_time_season
 
 	icon_edge = 'icons/seasonal/turf_edge.dmi'
 
-	initial_flooring = /decl/flooring/grass/seasonal_grass
+	initial_flooring = /datum/decl/flooring/grass/seasonal_grass
 
 	grass_types = list()
 	var/static/list/overlays_cache = list()
@@ -31,9 +36,9 @@ var/world_time_season
 	var/tree_types = list()
 	var/snow_chance = 10
 
-/turf/simulated/floor/outdoors/grass/seasonal/Initialize()
+/turf/simulated/floor/outdoors/grass/seasonal/Initialize(mapload)
 
-	switch(world_time_season)
+	switch(GLOB.world_time_season)
 		if("spring")
 			tree_types = list(
 				/obj/structure/flora/tree/bigtree,
@@ -52,9 +57,10 @@ var/world_time_season
 				/mob/living/simple_mob/vore/alienanimals/dustjumper = 20,
 				/mob/living/simple_mob/vore/bee = 20,
 				/mob/living/simple_mob/vore/horse/big = 5,
-				/mob/living/simple_mob/animal/wolf = 5,
-				/mob/living/simple_mob/animal/wolf/direwolf = 1,
-				/mob/living/simple_mob/animal/wolf/direwolf/dog = 1
+				/mob/living/simple_mob/vore/wolf = 5,
+				/mob/living/simple_mob/vore/wolf/direwolf = 1,
+				/mob/living/simple_mob/vore/wolf/direwolf/dog = 1,
+				/mob/living/simple_mob/vore/squirrel = 20
 			)
 			grass_types = list(
 				/obj/structure/flora/ausbushes/sparsegrass,
@@ -90,8 +96,9 @@ var/world_time_season
 				/mob/living/simple_mob/vore/horse/big = 5,
 				/mob/living/simple_mob/vore/pakkun = 2,
 				/mob/living/simple_mob/vore/fennix = 1,
-				/mob/living/simple_mob/animal/wolf/direwolf/dog = 1,
-				/mob/living/simple_mob/animal/passive/bird/parrot = 1
+				/mob/living/simple_mob/vore/wolf/direwolf/dog = 1,
+				/mob/living/simple_mob/animal/passive/bird/parrot = 1,
+				/mob/living/simple_mob/vore/squirrel = 20
 			)
 			grass_types = list(
 				/obj/structure/flora/ausbushes/sparsegrass,
@@ -113,9 +120,10 @@ var/world_time_season
 				/mob/living/simple_mob/vore/horse/big = 10,
 				/mob/living/simple_mob/vore/alienanimals/dustjumper = 20,
 				/mob/living/simple_mob/vore/horse/big = 1,
-				/mob/living/simple_mob/animal/wolf = 1,
-				/mob/living/simple_mob/animal/wolf/direwolf = 1,
-				/mob/living/simple_mob/animal/wolf/direwolf/dog = 1
+				/mob/living/simple_mob/vore/wolf = 1,
+				/mob/living/simple_mob/vore/wolf/direwolf = 1,
+				/mob/living/simple_mob/vore/wolf/direwolf/dog = 1,
+				/mob/living/simple_mob/vore/squirrel = 20
 			)
 			grass_types = list(
 				/obj/structure/flora/ausbushes/sparsegrass,
@@ -135,13 +143,14 @@ var/world_time_season
 			animal_types = list(
 				/mob/living/simple_mob/vore/rabbit/white = 40,
 				/mob/living/simple_mob/vore/redpanda = 10,
-				/mob/living/simple_mob/animal/wolf = 10,
-				/mob/living/simple_mob/animal/wolf/direwolf = 1,
-				/mob/living/simple_mob/animal/wolf/direwolf/dog = 1,
-				/mob/living/simple_mob/otie/friendly = 2,
-				/mob/living/simple_mob/otie/friendly/chubby = 1,
-				/mob/living/simple_mob/otie/red/friendly = 1,
-				/mob/living/simple_mob/otie/red/chubby = 1
+				/mob/living/simple_mob/vore/wolf = 10,
+				/mob/living/simple_mob/vore/wolf/direwolf = 1,
+				/mob/living/simple_mob/vore/wolf/direwolf/dog = 1,
+				/mob/living/simple_mob/vore/otie/friendly = 2,
+				/mob/living/simple_mob/vore/otie/friendly/chubby = 1,
+				/mob/living/simple_mob/vore/otie/red/friendly = 1,
+				/mob/living/simple_mob/vore/otie/red/chubby = 1,
+				/mob/living/simple_mob/vore/squirrel = 20
 			)
 			if(prob(snow_chance))
 				chill()
@@ -172,7 +181,7 @@ var/world_time_season
 
 /turf/simulated/floor/outdoors/grass/seasonal/proc/update_desc()
 
-	switch(world_time_season)
+	switch(GLOB.world_time_season)
 		if("spring")
 			desc = "Lush green grass, flourishing! Little flowers peek out from between the blades here and there!"
 		if("summer")
@@ -186,10 +195,10 @@ var/world_time_season
 /turf/simulated/floor/outdoors/grass/seasonal/update_icon(update_neighbors)
 	. = ..()
 	update_desc()
-	switch(world_time_season)
+	switch(GLOB.world_time_season)
 		if("spring")
 			if(prob(50))
-				var/cache_key = "[world_time_season]-overlay[rand(1,19)]"
+				var/cache_key = "[GLOB.world_time_season]-overlay[rand(1,19)]"
 				if(!overlays_cache[cache_key])
 					var/image/I = image(icon = src.icon, icon_state = cache_key, layer = ABOVE_TURF_LAYER) // Icon should be abstracted out
 					I.plane = TURF_PLANE
@@ -201,7 +210,7 @@ var/world_time_season
 			return
 		if("autumn")
 			if(prob(33))
-				var/cache_key = "[world_time_season]-overlay[rand(1,6)]"
+				var/cache_key = "[GLOB.world_time_season]-overlay[rand(1,6)]"
 				if(!overlays_cache[cache_key])
 					var/image/I = image(icon = src.icon, icon_state = cache_key, layer = ABOVE_TURF_LAYER) // Icon should be abstracted out
 					I.plane = TURF_PLANE
@@ -234,7 +243,7 @@ var/world_time_season
 /turf/simulated/floor/outdoors/grass/seasonal/dark
 	icon_state = "ds-grass"
 	edge_blending_priority = 4.01
-	initial_flooring = /decl/flooring/grass/seasonal_grass/dark
+	initial_flooring = /datum/decl/flooring/grass/seasonal_grass/dark
 	tree_chance = 5
 /turf/simulated/floor/outdoors/grass/seasonal/dark/notrees
 	tree_chance = 0
@@ -254,16 +263,16 @@ var/world_time_season
 /turf/simulated/floor/outdoors/grass/seasonal/dark/lowsnow
 	snow_chance = 1
 
-/turf/simulated/floor/water/seasonal/Initialize()
+/turf/simulated/floor/water/seasonal/Initialize(mapload)
 	. = ..()
-	switch(world_time_season)
+	switch(GLOB.world_time_season)
 		if("winter")
 			if(prob(99))
 				ChangeTurf(/turf/simulated/floor/outdoors/ice)
 
-/turf/simulated/floor/water/deep/seasonal/Initialize()
+/turf/simulated/floor/water/deep/seasonal/Initialize(mapload)
 	. = ..()
-	switch(world_time_season)
+	switch(GLOB.world_time_season)
 		if("winter")
 			if(prob(75))
 				ChangeTurf(/turf/simulated/floor/outdoors/ice)

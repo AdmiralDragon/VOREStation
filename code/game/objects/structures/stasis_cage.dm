@@ -8,21 +8,21 @@
 
 	var/mob/living/simple_mob/contained
 
-/obj/structure/stasis_cage/Initialize()
+/obj/structure/stasis_cage/Initialize(mapload)
 	. = ..()
 
 	var/mob/living/simple_mob/A = locate() in loc
 	if(A)
 		contain(A)
 
-/obj/structure/stasis_cage/attack_hand(var/mob/user)
+/obj/structure/stasis_cage/attack_hand(mob/user)
 	release()
 
-/obj/structure/stasis_cage/attack_robot(var/mob/user)
+/obj/structure/stasis_cage/attack_robot(mob/user)
 	if(Adjacent(user))
 		release()
 
-/obj/structure/stasis_cage/proc/contain(var/mob/living/simple_mob/animal)
+/obj/structure/stasis_cage/proc/contain(mob/living/simple_mob/animal)
 	if(contained || !istype(animal))
 		return
 
@@ -52,7 +52,7 @@
 
 	return ..()
 
-/mob/living/simple_mob/MouseDrop(var/obj/structure/stasis_cage/over_object)
+/mob/living/simple_mob/MouseDrop(obj/structure/stasis_cage/over_object)
 	if(istype(over_object) && Adjacent(over_object) && CanMouseDrop(over_object, usr))
 
 		if(!src.buckled || !istype(src.buckled, /obj/effect/energy_net))
@@ -61,7 +61,7 @@
 
 		usr.visible_message("[usr] begins stuffing \the [src] into \the [over_object].", "You begin stuffing \the [src] into \the [over_object].")
 		Bumped(usr)
-		if(do_after(usr, 20, over_object))
+		if(do_after(usr, 2 SECONDS, target = over_object))
 			usr.visible_message("[usr] has stuffed \the [src] into \the [over_object].", "You have stuffed \the [src] into \the [over_object].")
 			over_object.contain(src)
 	else

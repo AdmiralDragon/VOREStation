@@ -5,7 +5,7 @@ prob(50) makes it half as likely to appear and so forth.
 When editing the list, please try and keep similar probabilities near each other. High on top, low on bottom */
 
 //argument determines if to pick a random tip or use a forced choice.
-/datum/player_tips/proc/pick_tip(var/isSpecific)
+/datum/player_tips/proc/pick_tip(isSpecific)
 	var/choice = null
 	if(!(isSpecific == "none" || isSpecific == "general" || isSpecific == "gameplay" || isSpecific == "roleplay" || isSpecific == "lore" ))
 		choice = "none" //Making sure that wrong arguments still give tips.
@@ -45,20 +45,22 @@ When editing the list, please try and keep similar probabilities near each other
 				prob(50); "[info] Lost on the map? You can find In-Character help by speaking on the Common Radio. You can do this by pressing F3 and typing ' ; ' before your message. Your fellow co-workers will likely help. If OOC help is preferred, press F1 for mentorhelp. ",
 				prob(50); "[info] You may set your suit sensors by clicking on the icon in the bottom left corner, then right click the clothes that appear right above it. It is recommended to turn on suit sensors to 'TRACKING' before doing anything dangerous like mining, and to turn them off before digestion scenes as prey.",
 				prob(35); "[info] You can insert your I.D into your PDA. This frees up your belt from having to carry your PDA. Furthermore, by clicking and dragging the PDA to game screen, you can use it without holding it!",
-				prob(35); "[info] It is never a bad idea to visit the medbay if you get injured - small burns and cuts can get infected and become harder to treat! If there is no medical staff, bathrooms and the bar often has a NanoMed on the wall - with ointments to disinfect cuts and burns, bandages to treat bruises and encourage healing.",
+				prob(35); "[info] It is never a bad idea to visit the medbay if you get injured - small burns and cuts can get infected and become harder to treat! Alternatively, bathrooms and the bar often has a NanoMed on the wall - with ointments to disinfect cuts and burns, bandages to treat bruises and encourage healing.",
 				prob(35); "[info] Your vore-bellies have multiple add-ons! Muffling is excellent to ensure your prey does not accidentally inform everyone about their predicament, and jam suit sensors is a great courtesy to avoid medical being worried about your prey!",
 				prob(25); "[info] Two control modes exist for SS13 - hotkey ON and hotkey OFF. You can swap between the two modes by pressing TAB. In hotkey mode, to chat you need to press T to say anything which creates a small talking bubble. You can consult our list of hotkeys at https://wiki.vore-station.net/Keyboard_Shortcuts",
 				prob(25); "[info] Do you want to shift your character around, for instance to appear as if leaning on the wall? Press CTRL + SHIFT + arrow keys to do so! Moving resets this.",
 				prob(25); "[info] Emergency Fire Doors  seal breaches and keep active fires out. Please do not open them without good reason.",
 				prob(25); "[info] The kitchen's Oven can fit multiple ingredients in one slot if you pull the baking tray out first.  This is required for most recipes, and the Grille and Deep Frier work the same way!",
 				prob(10); "[info] You can keep a single item between rounds using secure lockboxes! Beware! You can only store 1 item across all characters! To find these lockboxes, feel free to ask over radio!",
-				prob(10); "[info] Not every hostile NPC you encounter while mining or exploring need to be defeated. Sometimes, it's better to avoid or run away from them. For example, star-treaders are slow and weak but have lots of HP - it is better to just run away."
+				prob(10); "[info] Not every hostile NPC you encounter while mining or exploring need to be defeated. Sometimes, it's better to avoid or run away from them. For example, star-treaders are slow and weak but have lots of HP - it is better to just run away.",
+				prob(10); "[info] Clicking on a venomous animal/person with a closed beaker will express their venom into the beaker!",
 				)
 
 		if("roleplay")
 			var/info = "The following is a roleplay-focused tip to playing on VOREStation \n"
 			return pick(
 				prob(45); "[info] Our server has a strong 'Bystander Consent' policy, meaning that scenes are expected to be mindful of the preferences of those around them in public, not just their partners. When in doubt, keep it subtle, and communicate via looc!",
+				prob(40); "[info] Sometimes, players may possess creatures that look like monsters or wild animals (e.g: defanged xenomorphs). These are called 'maint preds' and if you encounter them - you should avoid drawing attention to their existence over the radio! They're here to create unique vore scenarios, not to be treated as antags.",
 				prob(40); "[info] Please avoid a character that knows everything. Having only a small set of jobs you are capable of doing can help flesh out your character! It's OK for things to break and fail if nobody is around to fix it - you do not need to do others' jobs.",
 				prob(40); "[info] Just because you see something doesn't mean your character has to. A courtesy 'missing' of contraband or scene details can go a long way towards preserving everyone's fun!",
 				prob(40); "[info] Embrace the limits of your character's skillsets! Seeking out other players to help you with a more challenging task might build friendships, or even lead to a scene!",

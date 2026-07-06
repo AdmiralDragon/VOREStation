@@ -1,9 +1,10 @@
-import { NtosWindow } from '../layouts';
+import { NtosWindow } from 'tgui/layouts';
+
 import { SupermatterMonitorContent } from './SupermatterMonitor';
 
 export const NtosSupermatterMonitor = () => {
   return (
-    <NtosWindow width={600} height={400} resizable>
+    <NtosWindow width={600} height={400}>
       <NtosWindow.Content scrollable>
         <SupermatterMonitorContent />
       </NtosWindow.Content>

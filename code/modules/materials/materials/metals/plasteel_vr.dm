@@ -11,11 +11,10 @@
 	weight = 40
 	protectiveness = 30
 	conductivity = 7
-	stack_origin_tech = list(TECH_MATERIAL = 5)
 	supply_conversion_value = 8
 
 /datum/material/plastitanium/generate_recipes()
 	..()
 	recipes += list(
-		new /datum/stack_recipe("whetstone", /obj/item/weapon/whetstone, 2, time = 20),
+		new /datum/stack_recipe("whetstone", /obj/item/whetstone, 2, time = 20),
 	)

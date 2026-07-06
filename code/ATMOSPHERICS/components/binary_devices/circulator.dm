@@ -24,10 +24,10 @@
 
 	density = TRUE
 
-/obj/machinery/atmospherics/binary/circulator/New()
-	..()
-	desc = initial(desc) + " Its outlet port is to the [dir2text(dir)]."
+/obj/machinery/atmospherics/binary/circulator/Initialize(mapload)
+	. = ..()
 	air1.volume = 400
+	AddElement(/datum/element/rotatable)
 
 /obj/machinery/atmospherics/binary/circulator/proc/return_transfer_air()
 	var/datum/gas_mixture/removed
@@ -91,8 +91,8 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/circulator/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench())
+/obj/machinery/atmospherics/binary/circulator/attackby(obj/item/W as obj, mob/user as mob)
+	if(W.has_tool_quality(TOOL_WRENCH))
 		playsound(src, W.usesound, 75, 1)
 		anchored = !anchored
 		user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
@@ -128,25 +128,6 @@
 	else
 		..()
 
-/obj/machinery/atmospherics/binary/circulator/verb/rotate_clockwise()
-	set name = "Rotate Circulator Clockwise"
-	set category = "Object"
-	set src in view(1)
-
-	if (usr.stat || usr.restrained() || anchored)
-		return
-
-	src.set_dir(turn(src.dir, 270))
-	desc = initial(desc) + " Its outlet port is to the [dir2text(dir)]."
-
-
-/obj/machinery/atmospherics/binary/circulator/verb/rotate_counterclockwise()
-	set name = "Rotate Circulator Counterclockwise"
-	set category = "Object"
-	set src in view(1)
-
-	if (usr.stat || usr.restrained() || anchored)
-		return
-
-	src.set_dir(turn(src.dir, 90))
-	desc = initial(desc) + " Its outlet port is to the [dir2text(dir)]."
+/obj/machinery/atmospherics/binary/circulator/examine(mob/user, infix, suffix)
+	. = ..()
+	. += span_infoplain("Its outlet port is to the [dir2text(dir)].")

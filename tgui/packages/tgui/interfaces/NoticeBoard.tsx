@@ -1,15 +1,19 @@
-import { BooleanLike } from 'common/react';
-import { Fragment } from 'inferno';
-import { useBackend } from '../backend';
-import { Box, Button, LabeledList, Section } from '../components';
-import { Window } from '../layouts';
+import { useBackend } from 'tgui/backend';
+import { Window } from 'tgui/layouts';
+import { Box, Button, LabeledList, Section } from 'tgui-core/components';
+import type { BooleanLike } from 'tgui-core/react';
 
 type Data = {
-  notices: { name: string; isphoto: BooleanLike; ispaper: BooleanLike; ref: string }[];
+  notices: {
+    name: string;
+    isphoto: BooleanLike;
+    ispaper: BooleanLike;
+    ref: string;
+  }[];
 };
 
-export const NoticeBoard = (props, context) => {
-  const { act, data } = useBackend<Data>(context);
+export const NoticeBoard = (props) => {
+  const { act, data } = useBackend<Data>();
 
   const { notices } = data;
 
@@ -22,16 +26,36 @@ export const NoticeBoard = (props, context) => {
               {notices.map((notice, i) => (
                 <LabeledList.Item key={i} label={notice.name}>
                   {(notice.isphoto && (
-                    <Button icon="image" content="Look" onClick={() => act('look', { ref: notice.ref })} />
+                    <Button
+                      icon="image"
+                      onClick={() => act('look', { ref: notice.ref })}
+                    >
+                      Look
+                    </Button>
                   )) ||
                     (notice.ispaper && (
-                      <Fragment>
-                        <Button icon="sticky-note" content="Read" onClick={() => act('read', { ref: notice.ref })} />
-                        <Button icon="pen" content="Write" onClick={() => act('write', { ref: notice.ref })} />
-                      </Fragment>
+                      <>
+                        <Button
+                          icon="sticky-note"
+                          onClick={() => act('read', { ref: notice.ref })}
+                        >
+                          Read
+                        </Button>
+                        <Button
+                          icon="pen"
+                          onClick={() => act('write', { ref: notice.ref })}
+                        >
+                          Write
+                        </Button>
+                      </>
                     )) ||
                     'Unknown Entity'}
-                  <Button icon="minus-circle" content="Remove" onClick={() => act('remove', { ref: notice.ref })} />
+                  <Button
+                    icon="minus-circle"
+                    onClick={() => act('remove', { ref: notice.ref })}
+                  >
+                    Remove
+                  </Button>
                 </LabeledList.Item>
               ))}
             </LabeledList>
